@@ -1,8 +1,8 @@
-Otolith
+OtolithR
 =======
 
-Morphometrics for Otolith
+Identification of fish otolith using digital images
 
-Author: Wong Jin Yung, University of Malaya
-
-Please contact for details.
+Wong Jin Yung
+University of Malaya
+wongjinyung[at]gmail.com
