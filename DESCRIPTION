@@ -1,0 +1,20 @@
+Package: otolith
+Type: Package
+Title: Identification of fish otolith using digital images
+Version: 0.8
+Date: 2014-04-26
+Author: Wong Jin Yung
+Maintainer: Wong Jin Yung <wongjinyung@gmail.com>
+Description: A package provides tools to process digital images of fish
+    otoliths and building identification tools based on geometric
+    morphometrics.
+License: GPL(>= 2)
+Depends:
+    R(>= 3.1.0)
+Imports:
+    Morpho,
+    MASS,
+    mixOmics,
+    geomorph,
+    tree,
+    secr
