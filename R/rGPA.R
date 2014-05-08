@@ -2,7 +2,7 @@
 #' 
 #' @description a wrapper function for routine use to
 #'   run generalized Procrustes analysis.
-#' @param A p x k x n array of raw semilandmarksconfigurations
+#' @param A p x k x n array of raw semilandmarks configurations
 #' @param fix a numeric vector giving the semi-landmakrs that not to be slided. 
 #'  Default is all semilandmarks will be slided (See Note for issue).
 #' @param plotpca

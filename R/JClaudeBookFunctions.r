@@ -494,7 +494,7 @@ tps2d<-function(M, matr, matt)
 ####f4.33
 
 #modified (14.03.14)
-tps<- function(matr, matt, n, master){
+tps2<- function(matr, matt, n, master){
   xm<-min(matt[,1])
   ym<-min(matt[,2])
   xM<-max(matt[,1])

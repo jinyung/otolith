@@ -50,5 +50,5 @@ routine1 <- function(imagejfolder, write=TRUE, plot=FALSE, label=TRUE, extract=c
     pca <- prcomp(desdatan[, 2:13], scale.=TRUE)
     plotpca(pca, class=desdatan$sp)
   } 
-  invisible(desdata=desdatan)
+  invisible(desdatan)
 }

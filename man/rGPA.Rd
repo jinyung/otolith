@@ -5,8 +5,8 @@
 rGPA(A, fix = NULL, plotpca = FALSE, class)
 }
 \arguments{
-  \item{A}{p x k x n array of raw
-  semilandmarksconfigurations}
+  \item{A}{p x k x n array of raw semilandmarks
+  configurations}
 
   \item{fix}{a numeric vector giving the semi-landmakrs
   that not to be slided.  Default is all semilandmarks will

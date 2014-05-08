@@ -59,6 +59,6 @@ harcv <- function(X, Y, har, saveplot=FALSE, plotsize=1000,
         paste(getwd(), filename, sep="/"), "\n\n")
   }
   result <- cbind(error, errorsd)
-  rownames(result) <- paste0("har-", 1:har)
+  rownames(result) <- paste0("har2-", (1:(har-1)) + 1)
   return(result)
 }
