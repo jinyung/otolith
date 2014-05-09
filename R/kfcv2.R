@@ -17,11 +17,21 @@
 #'    by the total number of that class in training set.}
 #'  \item{total}{total number of prediction after excluding the ones below 
 #'  threshold, if \code{threhold != NULL}}
+#' @details
+#'  Recall = Sensitivity = tp / (tp + fn)
+#'  Precision = tp / (tp + fp)
+#'  Specificity = tn / (tn + fp) 
+#'  and, tp= true positive, tn=true negative, fp=false positive, fn=false negative
+#'  Please refer to reference for detailed explanation.
 #' @seealso
 #'  Similar: \code{\link{kfcv}}
 #'  
 #'  Function that wraps this function: \code{\link{mrkfcv2}}
 #' @export
+#' @references 
+#'  Sokolova, M., & Lapalme, G. (2009). A systematic analysis of performance 
+#'  measures for classification tasks. Information Processing & Management, 
+#'  45(4), 427-437.
 
 kfcv2 <- function(X, Y, method=c("lda", "plsda", "tree"),
                   k=5, threshold=NULL, ncomp=NULL) {
@@ -55,11 +65,11 @@ kfcv2 <- function(X, Y, method=c("lda", "plsda", "tree"),
     trainlength<- length(levels(train$class))
     # build classification sub-models with selected method
     if (method == "lda"){
-      mod.i <- lda(class~predictor, data=train, prior=
+      mod.i <- lda(class ~ predictor, data=train, prior=
                      rep(1/trainlength, trainlength))
       prediction.temp <- predict(mod.i, test)
       prediction.i <- prediction.temp$class
-      #add in posterior thresholding 25.4.14
+      # add in posterior thresholding 25.4.14
       if (!is.null(threshold)) {
         posterior <- prediction.temp$posterior
         posmax <- apply(posterior, 1, max)
@@ -73,11 +83,11 @@ kfcv2 <- function(X, Y, method=c("lda", "plsda", "tree"),
       require(mixOmics)
       if(is.null(ncomp) == TRUE){ncomp <- trainlength - 1}
       mod.i <- plsda(X=train$predictor, Y=train$class, ncomp=ncomp)
-      prediction.temp<-predict(mod.i, test$predictor)
+      prediction.temp <- predict(mod.i, test$predictor)
       prediction.i<-levels(train$class)[prediction.temp$class$max.dist[, ncomp]]
       prediction.i <- factor(prediction.i, levels=levels(Y))
     } else if (method == "tree"){
-      mod.i <- tree(class~predictor, data=train)
+      mod.i <- tree(class ~ predictor, data=train)
       prediction.i <- predict(mod.i, test, type='class')
     }
     # get the misclassification rate
@@ -89,18 +99,18 @@ kfcv2 <- function(X, Y, method=c("lda", "plsda", "tree"),
       wrongsum.i <- wrongsum.i+ sum(t.i[rownames(t.i) != colnames(t.i)[j], 
                     colnames(t.i)[j]])
     }
-    misclass.rate.i <- wrongsum.i / length(alltestingindices[[i]])*100
+    misclass.rate.i <- wrongsum.i / length(alltestingindices[[i]]) * 100
     misclass[i] <- misclass.rate.i 
     if (!is.null(threshold))
       total.pred[i] <- total.pred.i    
     tempstat.i <- tempstat
     # calculate the stats
     for (m in 1: class.length) {
-      tempstat.i[m, 1] <- t.i[m,m] / (sum(t.i[,m])) # recall
-      if (sum(t.i[m,])>0)
-        tempstat.i[m,2] <- t.i[m,m] / (sum(t.i[m,])) # precision
-      tempstat.i[m,3] <- sum(t.i[-m, -m])/ (sum(t.i[-m, -m]) + 
-                         sum(t.i[m,])-t.i[m,m] ) # specificity
+      tempstat.i[m, 1] <- t.i[m, m] / (sum(t.i[, m])) # recall
+      if (sum(t.i[m, ]) > 0)
+        tempstat.i[m, 2] <- t.i[m, m] / (sum(t.i[m,])) # precision
+      tempstat.i[m, 3] <- sum(t.i[-m, -m])/ (sum(t.i[-m, -m]) + 
+                         sum(t.i[m, ])-t.i[m, m] ) # specificity
       for (r in 1:class.length)
         tempcon[r, m] <- t.i[r, m]/sum(t.i[, m])   
     }
@@ -110,8 +120,8 @@ kfcv2 <- function(X, Y, method=c("lda", "plsda", "tree"),
     removeindex2.i <- which(summary(train$class) == 0)
     tempstat.i[removeindex1.i, ] <- NA
     tempstat.i[removeindex2.i, ] <- NA
-    tempcon[, removeindex1.i] <-NA
-    tempcon[, removeindex2.i] <-NA
+    tempcon[, removeindex1.i] <- NA
+    tempcon[, removeindex2.i] <- NA
     stat[, , i] <- tempstat.i  
     conmat[, , i] <- tempcon
   }

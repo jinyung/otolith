@@ -23,6 +23,8 @@
 #'  similar: \code{\link{routine1}}
 #'  
 #'  which this function wraps: \code{\link{orderOutline} \link{equaldist}}
+#'  
+#'  to read the \code{.tps} file: \code{\link{readland.tps}}
 #' @export
 
 routine2 <- function(imagejfolder, rfolder, write=TRUE, 
