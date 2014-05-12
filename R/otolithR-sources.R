@@ -580,15 +580,15 @@ alltri<-function(p)
  t2<-t1[t1[,1]<t1[,2],]
  t3<-t2[t2[,2]<t2[,3],]
  t3}
-####f4.40
+####f4.40    ##warning fixed
 anglerao<-function(M, triang)
 {n<-dim(triang)[1]
  triangl<-triang
  for (i in 1:n){
    t1<-triang[i,]
-   AB<-complex(real=M[t1[2],1]-M[t1[1],1],imag=M[t1[2],2]-M[t1[1],2])
-   BC<-complex(real=M[t1[3],1]-M[t1[2],1],imag=M[t1[3],2]-M[t1[2],2])
-   AC<-complex(real=M[t1[3],1]-M[t1[1],1],imag=M[t1[3],2]-M[t1[1],2])
+   AB<-complex(real=M[t1[2],1]-M[t1[1],1],imaginary=M[t1[2],2]-M[t1[1],2])
+   BC<-complex(real=M[t1[3],1]-M[t1[2],1],imaginary=M[t1[3],2]-M[t1[2],2])
+   AC<-complex(real=M[t1[3],1]-M[t1[1],1],imaginary=M[t1[3],2]-M[t1[1],2])
    BAC<-Arg(complex(argument=-Arg(AB)+Arg(AC)))
    CBA<-Arg(complex(argument=-Arg(BC)+Arg(-AB)))
    ACB<-Arg(complex(argument=-Arg(-AC)+Arg(-BC)))
@@ -861,9 +861,9 @@ Hotellingsp<-function(SSef, SSer, dfef, dfer, exact=F)
   ddfnum<-p*k
   ddfden<-4+(p*k+2)/(b-1)}
  unlist(list("dfeffect"=dfef,"dferror"=dfer,"T2"=Ht,"Approx_F"=Fapprox,"df1"=ddfnum,"df2"=ddfden,"p"=pval))}
-####f6.5
+####f6.5 ##warning fixed
 mantrstat<-function (m1, m2)
-{ cor(lower.triang(m1),lower.triang(m2))}
+{ cor(lower.tri(m1),lower.tri(m2))}
 ####f6.6
 permrowscols<-function (m1,n,coord)
 {s <- sample(1:(n/coord))
@@ -889,9 +889,9 @@ Rv<-function(VCV, index1)
 lowertriang<-function (m)
 {d<- dim(m)
  m[col(m) <= row(m)]}
-####f7.1''
+####f7.1'' ##warning fixed
 mstat<-function (m1, m2)
-{cor(lower.triang(m1), lower.triang(m2))}
+{cor(lower.tri(m1), lower.tri(m2))}
 ####f7.1
 mantel.t3<-function(m1,m2,coord=1,nperm=5000,graph=FALSE)
 {n <- nrow(m1)

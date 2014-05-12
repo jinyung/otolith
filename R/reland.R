@@ -20,10 +20,11 @@
 #' @export
 
 reland <- function (landdata, type=c("ori", "rev", "flip", "fliprev")){
+  require(secr)
   nd <-dim(landdata)[1] / 2
   landdatanew <- landdataF <- landdataFN <- 
     array(data = NA,  dim=c(dim(landdata)[1], 2))
-  landdataF <- flip (landdata, lr=T)
+  landdataF <- flip(landdata, lr=TRUE)
   landdataFN[1, ] <- landdataF[nd + 1, ]
   landdataFN[nd + 1, ] <- landdataF[1, ]
   landdataFN[2:nd, ] <- landdataF[nd:2, ]

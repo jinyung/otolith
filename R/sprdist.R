@@ -18,6 +18,7 @@
 
 
 sprdist <- function(A, group) {
+  require(Morpho)
   group <- factor(group)
   grlevel <- levels(group)
   sdist.mean <- numeric(length=length(grlevel)) # to save dist for each group 

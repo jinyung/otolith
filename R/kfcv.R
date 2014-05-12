@@ -30,9 +30,9 @@
 #' @export
 
 kfcv <- function(X, Y, method=c("lda", "plsda", "tree"), 
-                 k=5, threshold=NULL, ncomp=NULL){
+                 k=5, threshold=NULL, ncomp=NULL) {
   alltestingindices <- kfcv.testing(dim(X)[1], k=k)
-  Y<- factor(Y)
+  Y <- factor(Y)
   dat <- data.frame(X)
   dat$predictor <- as.matrix(X)
   dat$class <- Y

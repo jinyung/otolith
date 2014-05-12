@@ -6,13 +6,14 @@
 #' @param project a project object, see \code{\link{saveproj}}
 #' @param show how many search results to be shown (in order of ranking)
 #' @return search result
+#' @importFrom Morpho rotonto kendalldist
 #' @seealso 
 #'  Functions that wraps this function: \code{\link{otosearch}}
 #'  
 #'  Which this function wraps: \code{\link{otosearch2}}, \code{\link{reland}}
 
 otosearch3 <- function(specimen, project, show=5) {
-  require(secr)
+  require(Morpho)
   meanshape <- project$gpa$meanshape
   # first get specimen to (by-species) meanshape dist
   ms.rdist <- numeric() 
@@ -20,14 +21,14 @@ otosearch3 <- function(specimen, project, show=5) {
   for (i in 1:mslevel) {
     temp <- rotonto(x=specimen, y=meanshape[, , i])
     ms.rdist[i] <- kendalldist(temp$X, temp$Y)
-    temp2 <- rotonto(x=reland(specimen, "rev"), y=meanshape[,,i])
+    temp2 <- rotonto(x=reland(specimen, "rev"), y=meanshape[, , i])
     ms.rdist[mslevel + i] <- kendalldist(temp2$X, temp2$Y)
-    temp3 <- rotonto(x=reland(specimen, "flip"), y=meanshape[,,i])
-    ms.rdist[mslevel*2 + i] <- kendalldist(temp3$X, temp3$Y)
-    temp4 <- rotonto(x=reland(specimen, "fliprev"), y=meanshape[,,i])
-    ms.rdist[mslevel*3 + i] <- kendalldist(temp4$X, temp4$Y)
+    temp3 <- rotonto(x=reland(specimen, "flip"), y=meanshape[, , i])
+    ms.rdist[mslevel * 2 + i] <- kendalldist(temp3$X, temp3$Y)
+    temp4 <- rotonto(x=reland(specimen, "fliprev"), y=meanshape[, , i])
+    ms.rdist[mslevel * 3 + i] <- kendalldist(temp4$X, temp4$Y)
   }
-  distmax <- project$gpa$rdist[,3]
+  distmax <- project$gpa$rdist[, 3]
   # see if any specimen to meanshape dist less than the max dist to 
   # (contd) meanshape rpesent in the databse
   if (any(ms.rdist < distmax)) {
@@ -114,7 +115,7 @@ otosearch3 <- function(specimen, project, show=5) {
         result <- rbind(result, tresult)
       } else {
         clevel <- levels(project$class)[index[i] - mslevel * 3]
-        Aindex <-which(project$class == clevel)
+        Aindex <- which(project$class == clevel)
         tresult <- otosearch2(reland(specimen, "fliprev"), 
                    project$landmark[, , Aindex], show=length(Aindex))
         tresult$species <- rep(clevel, length(Aindex))

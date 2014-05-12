@@ -18,7 +18,7 @@ routine1 <- function(imagejfolder, write=TRUE, plot=FALSE, label=TRUE, extract=c
   setwd(imagejfolder)
   deslist <- list.files(pattern= "_shapedescriptors.txt")  
   nlist <- gsub("_shapedescriptors.txt", "", deslist) 
-  #create shapedescriptor dataframe
+  # create shapedescriptor dataframe
   desdata <- NULL
   cat("------Reading shape descriptor files------\n")
   for (i in 1:length(deslist)) {

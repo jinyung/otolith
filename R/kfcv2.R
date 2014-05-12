@@ -35,7 +35,6 @@
 
 kfcv2 <- function(X, Y, method=c("lda", "plsda", "tree"),
                   k=5, threshold=NULL, ncomp=NULL) {
-  require(MASS); require(tree)
   # create the folds
   alltestingindices <- kfcv.testing(dim(X)[1], k=k)
   Y <- factor(Y)
@@ -65,6 +64,7 @@ kfcv2 <- function(X, Y, method=c("lda", "plsda", "tree"),
     trainlength<- length(levels(train$class))
     # build classification sub-models with selected method
     if (method == "lda"){
+      require(MASS);
       mod.i <- lda(class ~ predictor, data=train, prior=
                      rep(1/trainlength, trainlength))
       prediction.temp <- predict(mod.i, test)
@@ -87,6 +87,7 @@ kfcv2 <- function(X, Y, method=c("lda", "plsda", "tree"),
       prediction.i<-levels(train$class)[prediction.temp$class$max.dist[, ncomp]]
       prediction.i <- factor(prediction.i, levels=levels(Y))
     } else if (method == "tree"){
+      require(tree)
       mod.i <- tree(class ~ predictor, data=train)
       prediction.i <- predict(mod.i, test, type='class')
     }

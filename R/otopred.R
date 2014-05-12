@@ -61,10 +61,12 @@ otopred <- function(query, project, type=c("nef", "gpa", "des"),
       stop ("query data type wrong")
     newdata <- query[, c("AspRatio", "Circ", "Roundness", "Compactness", 
                "Solidity", "Convexity", "Shape", "RFactor", "ModRatio")]
-    if (method == "lda")
+    if (method == "lda") {
+      require(MASS)
       mod <- lda(x=project$des[, c("AspRatio", "Circ", "Roundness","Compactness",
              "Solidity", "Convexity", "Shape", "RFactor", "ModRatio")], 
              project$class)
+    }
   } else if (type == "gpa") {
     p <- dim(query)[1]
     n <- dim(query)[3]
@@ -100,8 +102,10 @@ otopred <- function(query, project, type=c("nef", "gpa", "des"),
       rownames(result) <- query[,"Label"]
     }
   } else if (method == "tree") {
+    require(tree)
     # to be added 
   } else if (method == "plsda") {
+    require(mixOmics)
     # to be added
   }
   if (write == TRUE) {

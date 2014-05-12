@@ -13,6 +13,7 @@
 #'  Which this function wraps: \code{\link{rotonto}}, \code{\link{kendalldist}}
 
 otosearch2 <- function(specimen, database, species=NULL, show=5) {
+  require(Morpho)
   if (dim(specimen)[1] != dim(database)[1])
     stop("the number of semi-landmarks differs between 
          the specimen and the database")

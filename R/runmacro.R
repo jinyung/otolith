@@ -35,15 +35,15 @@ runmacro <- function (imagej=c("built-in","select"), input=NULL, output=NULL) {
     imagej <- system.file("ImageJ", package="otolith")
   } else {
     imagej <- choose.dir(caption="Select folder containing ImageJ's \"ij.jar\" file")
-    imagej <- gsub("\\", "/", imagej, fix=TRUE)
+    imagej <- gsub("\\", "/", imagej, fixed=TRUE)
   }
   if (is.null(input)) { 
     input <- paste0(choose.dir(caption="Select input folder containing the images"),"\\")
-    input <- gsub("\\", "/", input, fix=TRUE)
+    input <- gsub("\\", "/", input, fixed=TRUE)
   }
   if (is.null(output)) {
     output <- paste0(choose.dir(caption="Select output folder to save the outlines"),"\\")
-    output <- gsub("\\", "/", input, fix=TRUE)
+    output <- gsub("\\", "/", input, fixed=TRUE)
   }
   # the command to be passed to shell
   cmd <- paste("cd", imagej, "&& ij.jar", 

@@ -32,7 +32,7 @@ rNEF <- function (A, plotpca=FALSE, class) {
   vharm <- apply(coeff, 2, var)
   variation <- apply(matrix(vharm, (p/2), 4), 1, sum)
   expvar <- round(cumsum(variation[-1]) / sum(variation[-1]), 3)[1:(p/2 - 1)]
-  if (plotpca == TRUE){
+  if (plotpca == TRUE) {
     pca <- prcomp(coeff)
     plotpca(pca, size=size, class=class)
   }

@@ -28,24 +28,24 @@ pccv <- function(X, Y, pc, saveplot=FALSE, plotsize=1000,
                  method="lda", run=30, k=5) {
   error <- numeric()
   errorsd <- numeric()
-  temp <-NULL
-  misclass <-data.frame(matrix(NA, k * run * pc, 2))
-  misclass[, 2] <- factor(rep(paste0("PC",1:pc), each=run * k), 
-                          levels= paste0("PC", 1:pc),ordered=TRUE, labels=1:pc)
+  temp <- NULL
+  misclass <- data.frame(matrix(NA, k * run * pc, 2))
+  misclass[, 2] <- factor(rep(paste0("PC", 1:pc), each=run * k), 
+                          levels= paste0("PC", 1:pc), ordered=TRUE, labels=1:pc)
   cat("------ evaluating dimension reduction ------\n")
   for (i in 1:pc) {
-    cat("PC",i,"\n")
+    cat("PC", i, "\n")
     flush.console()
     temp <- mrkfcv(X=data.frame(selectdim(X, pc= i)), Y= Y, suppress=TRUE, 
                    method=method, k=k, run=run) 
     # have to put X into data.frame because kfcv extract info using dim(), 
     # and when pc=1, it will becaome a vector and dim() will give error
-    misclass[((i-1) * run * k + 1):(i * run * k), 1] <- temp$misclass
+    misclass[((i - 1) * run * k + 1):(i * run * k), 1] <- temp$misclass
     error[i] <- 100 - temp$accuracy
     errorsd[i] <- temp$accu.sd
   }
   cat("--- dimension reduction evaluation ended---\n\n")
-  if (saveplot == TRUE){
+  if (saveplot == TRUE) {
     filename <- "pc-optimization.tif"
     tiff(filename, plotsize, plotsize, res=172)
   }  

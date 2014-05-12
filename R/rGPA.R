@@ -28,7 +28,8 @@
 #'  semi-landmarks should be fixed if the user intend to use the 
 #'  \code{\link{otopred}} function (6 May 2014).
 
-rGPA<- function(A, fix=NULL, plotpca=FALSE, class){
+rGPA <- function(A, fix=NULL, plotpca=FALSE, class) {
+  require(Morpho)
   p <- dim(A)[1]
   n <- dim(A)[3]
   slide <- 1:p
