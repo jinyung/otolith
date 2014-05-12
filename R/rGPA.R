@@ -5,8 +5,11 @@
 #' @param A p x k x n array of raw semilandmarks configurations
 #' @param fix a numeric vector giving the semi-landmakrs that not to be slided. 
 #'  Default is all semilandmarks will be slided (See Note for issue).
-#' @param plotpca
-#' @param class
+#' @param plotpca logical. whether to plot PCA for preliminary assessment of 
+#'  the data
+#' @param class factor giving the species/grouping, used for plotting purpose, 
+#'  e.g. using sp value from \code{\link{routine1}}. 
+#'  Used only when \code{plotpca=TRUE}
 #' @return 
 #'  \item{tanc}{Procrustes aligned configurations projected onto tangent shape space}
 #'  \item{size}{centroid size}  

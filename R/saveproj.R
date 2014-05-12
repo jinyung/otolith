@@ -18,8 +18,10 @@
 #' @param gpa.threshold numeric. optional. threshold value determined by 
 #'  \code{\link{threcv}}
 #' @return a \code{.rds} file saved
+#' @Note The saved project could be read into R using \code{\link{readRDS}} 
+#'  function.
 #' @seealso 
-#'  Similar: \code{\link{loadproj}}, \code{\link{updateproj}}
+#'  Similar: \code{\link{readRDS}}, \code{\link{updateproj}}
 #'  
 #'  Which this function wraps: \code{\link{saveRDS}}
 #' @export

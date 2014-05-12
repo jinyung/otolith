@@ -43,7 +43,7 @@ descriptor data, GPA/ EFA transformed data, optimized
 parameters into a \code{.rds} file.
 }
 \seealso{
-Similar: \code{\link{loadproj}}, \code{\link{updateproj}}
+Similar: \code{\link{readRDS}}, \code{\link{updateproj}}
 
 Which this function wraps: \code{\link{saveRDS}}
 }

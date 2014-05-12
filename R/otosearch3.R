@@ -3,8 +3,7 @@
 #' @description search one specimen against whole database, with exhaustive 
 #'  search using all possible semi-landmarks configuration arrangements
 #' @param specimen matrix of configuration of query 
-#' @param database array of configuration to search against
-#' @param species species/ grouping of \code{database} in the same order
+#' @param project a project object, see \code{\link{saveproj}}
 #' @param show how many search results to be shown (in order of ranking)
 #' @return search result
 #' @seealso 

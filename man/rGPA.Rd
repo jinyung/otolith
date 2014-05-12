@@ -12,9 +12,13 @@ rGPA(A, fix = NULL, plotpca = FALSE, class)
   that not to be slided.  Default is all semilandmarks will
   be slided (See Note for issue).}
 
-  \item{plotpca}{}
+  \item{plotpca}{logical. whether to plot PCA for
+  preliminary assessment of the data}
 
-  \item{class}{}
+  \item{class}{factor giving the species/grouping, used for
+  plotting purpose, e.g. using sp value from
+  \code{\link{routine1}}.  Used only when
+  \code{plotpca=TRUE}}
 }
 \value{
 \item{tanc}{Procrustes aligned configurations projected

@@ -7,10 +7,8 @@ otosearch3(specimen, project, show = 5)
 \arguments{
   \item{specimen}{matrix of configuration of query}
 
-  \item{database}{array of configuration to search against}
-
-  \item{species}{species/ grouping of \code{database} in
-  the same order}
+  \item{project}{a project object, see
+  \code{\link{saveproj}}}
 
   \item{show}{how many search results to be shown (in order
   of ranking)}

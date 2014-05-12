@@ -50,6 +50,6 @@ with new ones, the rest will remain the same.
 the current version only support overwrite(!), not append.
 }
 \seealso{
-\code{\link{saveproj}}, \code{\link{loadproj}}
+\code{\link{saveproj}}, \code{\link{readRDS}}
 }
 

@@ -4,7 +4,7 @@
 #' @param landdata semi-landmarks data generated from \code{\link{equaldist}} 
 #'  functions. A matrix/dataframe consists of two columns of x and y coordinates
 #' @param type character of \code{"ori"}, \code{"rev"}, \code{"flip"}, 
-#'  or \code{"fliprev"} to set the configuration of the semi-landmarks. See detais. 
+#'  or \code{"fliprev"} to set the configuration of the semi-landmarks. See details. 
 #' @return matrix of xy coordinates of re-arranged semi-landmarks data. 
 #' @details There are four possible configurations of semi-landmark sampling for 
 #'  any set of otolith, depending on the side of the otolith and the initial 

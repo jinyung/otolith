@@ -8,7 +8,7 @@
 #'  the rest will remain the same.
 #' @note the current version only support overwrite(!), not append.  
 #' @seealso 
-#'  \code{\link{saveproj}}, \code{\link{loadproj}}
+#'  \code{\link{saveproj}}, \code{\link{readRDS}}
 #' @export
 
 updateproj <- function(name, landmark=NULL, des=NULL, gpa=NULL, nef=NULL, pc=NULL, 

@@ -5,7 +5,7 @@
 rNEF(A, plotpca = FALSE, class)
 }
 \arguments{
-  \item{a}{p x k x n array of raw semilandmarks
+  \item{A}{p x k x n array of raw semilandmarks
   configurations}
 
   \item{plotpca}{Logical. Whether to plot the PCA for quick

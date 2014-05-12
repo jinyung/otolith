@@ -11,7 +11,7 @@ reland(landdata, type = c("ori", "rev", "flip", "fliprev"))
 
   \item{type}{character of \code{"ori"}, \code{"rev"},
   \code{"flip"}, or \code{"fliprev"} to set the
-  configuration of the semi-landmarks. See detais.}
+  configuration of the semi-landmarks. See details.}
 }
 \value{
 matrix of xy coordinates of re-arranged semi-landmarks

@@ -2,7 +2,7 @@
 #' 
 #' @description a wrapper functions using the codes from J Claude's book,  
 #'  for routine use to run normalized elliptical Fourier analysis.
-#' @param a p x k x n array of raw semilandmarks configurations
+#' @param A p x k x n array of raw semilandmarks configurations
 #' @param plotpca Logical. Whether to plot the PCA for quick preliminary view. 
 #'  Plot first 3 PCs. 
 #' @param class factor giving the species/grouping, used for plotting purpose, 
