@@ -12,7 +12,7 @@
 checkart <- function (outdata) {
   neigh <- NULL
   artifact <- FALSE 
-  for (i in 1:(dim(outdata)[1] - 1)){
+  for (i in 1:(dim(outdata)[1] - 1)) {
     neigh[i] <- 0
     xtemp <- outdata[outdata[, 1] == outdata[i, 1], ]
     ytemp <- outdata[outdata[, 2] == outdata[i, 2], ]
@@ -25,7 +25,7 @@ checkart <- function (outdata) {
     if (any(ytemp[, 1] == (outdata[i, 1] - 1)))
       neigh[i] <- neigh[i] + 1
   }
-  if (any(neigh > 2,  na.rm=T))
+  if (any(neigh > 2,  na.rm=TRUE))
     artifact <- TRUE
   index <- which(neigh > 2)
   return(list("artifact"=artifact,  "index"=index))  

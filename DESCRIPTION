@@ -1,8 +1,8 @@
 Package: otolith
 Type: Package
 Title: Identification of fish otolith using digital images
-Version: 0.1
-Date: 2014-05-12
+Version: 0.1.1
+Date: 2014-05-13
 Author: Wong Jin Yung
 Maintainer: Wong Jin Yung <wongjinyung@gmail.com>
 Description: A package provides tools to process digital images of fish
@@ -19,4 +19,4 @@ Imports:
     tree,
     secr
 LazyLoad: yes
-URL: https://github.com/jinyung/OtolithR
+URL: http://bitbucket.org/jinyung/otolith

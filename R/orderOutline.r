@@ -17,14 +17,14 @@ orderOutline <- function (outdata) {
     xeq <- outdata [(outdata[, 1] == new.out[i, 1]), ] 
     yeq <- outdata [(outdata[, 2] == new.out[i, 2]), ] 
     tempout <- xeq[(xeq[, 2] == new.out[i, 2] + 1)|(xeq[, 2] == 
-                new.out[i, 2] - 1), ] 
+               new.out[i, 2] - 1), ] 
     tempout <- rbind(tempout,  yeq[(yeq[, 1] == new.out[i, 1] + 1)|
-                (yeq[, 1] == new.out[i, 1] - 1), ]) 
+               (yeq[, 1] == new.out[i, 1] - 1), ]) 
     if (i == 1) {
       nextneighbor <- tempout[1, ]
     } else {
-      nextneighbor <- subset(tempout,  !(tempout[, 1] ==  new.out[i - 1, 1] & 
-                        tempout[, 2] ==  new.out[i - 1, 2])) 
+      nextneighbor <- subset(tempout, !(tempout[, 1] == new.out[i - 1, 1] & 
+                      tempout[, 2] == new.out[i - 1, 2])) 
     }
     new.out[j, ] <-c(t(nextneighbor))
   }
