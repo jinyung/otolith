@@ -59,13 +59,6 @@ The calculated by-class statistics (\code{stat.sum}) are
 average of all values of number of \code{k x run} of
 submodels (\code{NA} values are excluded).
 }
-\references{
-Bouckaert, R.R., 2003. Choosing between two learning
-algorithms based on calibrated tests. In: Fawcett, T.,
-Mishra, N. (Eds.), Proceedings of the Twentieth
-International Conference (ICML 2003) on Machine Learning.
-August 21-24, 2003, AAAI Press, Washington.
-}
 \seealso{
 Similar: \code{\link{mrkfcv}}
 

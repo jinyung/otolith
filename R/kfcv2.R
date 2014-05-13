@@ -18,9 +18,11 @@
 #'  \item{total}{total number of prediction after excluding the ones below 
 #'  threshold, if \code{threhold != NULL}}
 #' @details
-#'  Recall = Sensitivity = tp / (tp + fn)
-#'  Precision = tp / (tp + fp)
-#'  Specificity = tn / (tn + fp) 
+#'  \itemize{
+#'    \item Recall = Sensitivity = tp / (tp + fn)
+#'    \item Precision = tp / (tp + fp)
+#'    \item Specificity = tn / (tn + fp) 
+#'  }
 #'  and, tp= true positive, tn=true negative, fp=false positive, fn=false negative
 #'  Please refer to reference for detailed explanation.
 #' @seealso
@@ -30,7 +32,7 @@
 #' @export
 #' @references 
 #'  Sokolova, M., & Lapalme, G. (2009). A systematic analysis of performance 
-#'  measures for classification tasks. Information Processing & Management, 
+#'  measures for classification tasks. \emph{Information Processing & Management}, 
 #'  45(4), 427-437.
 
 kfcv2 <- function(X, Y, method=c("lda", "plsda", "tree"),

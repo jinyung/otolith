@@ -55,15 +55,15 @@ run multiple runs of k-fold cross validation, see referece.
 \references{
 Bouckaert, R.R., 2003. Choosing between two learning
 algorithms based on calibrated tests. In: Fawcett, T.,
-Mishra, N. (Eds.), Proceedings of the Twentieth
-International Conference (ICML 2003) on Machine Learning.
+Mishra, N. (Eds.), \emph{Proceedings of the Twentieth
+International Conference (ICML 2003) on Machine Learning}.
 August 21-24, 2003, AAAI Press, Washington.
 
 Beleites, C., Baumgartner, R., Bowman, C., Somorjai, R.,
 Steiner, G., Salzer, R., & Sowa, M. G. (2005). Variance
 reduction in estimating classification error using sparse
-datasets.  Chemometrics and Intelligent Laboratory Systems,
-79(1), 91-100.
+datasets.  \emph{Chemometrics and Intelligent Laboratory
+Systems}, 79(1), 91-100.
 }
 \seealso{
 Similar: \code{\link{mrkfcv2}}

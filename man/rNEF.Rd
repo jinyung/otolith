@@ -8,7 +8,7 @@ rNEF(A, plotpca = FALSE, class)
   \item{A}{p x k x n array of raw semilandmarks
   configurations}
 
-  \item{plotpca}{Logical. Whether to plot the PCA for quick
+  \item{plotpca}{logical. Whether to plot the PCA for quick
   preliminary view.  Plot first 3 PCs.}
 
   \item{class}{factor giving the species/grouping, used for
@@ -24,12 +24,12 @@ reference)} \item{size}{size of the semi-major axis of the
 first fitting ellipse. See reference}
 }
 \description{
-a wrapper functions using the codes from J Claude's book,
+A wrapper functions using the codes from J Claude's book,
 for routine use to run normalized elliptical Fourier
 analysis.
 }
 \references{
-Claude J. (2008). Morphometrics with R. Springer.
+Claude J. (2008). \emph{Morphometrics with R}. Springer.
 }
 \seealso{
 \code{\link{rGPA}}

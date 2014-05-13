@@ -26,12 +26,6 @@
 #'  
 #'  Which this function wraps: \code{\link{kfcv2}}
 #' @export
-#' @references 
-#'  Bouckaert, R.R., 2003. Choosing between two learning algorithms based on 
-#'  calibrated tests. In: Fawcett, T., Mishra, N. (Eds.), 
-#'  Proceedings of the Twentieth International Conference (ICML 2003) on 
-#'  Machine Learning. August 21-24, 2003, AAAI Press, Washington.
-
 
 mrkfcv2 <- function(X, Y, method="lda", k=5, run=100, suppress=FALSE, 
                     threshold=NULL, ncomp=NULL) {

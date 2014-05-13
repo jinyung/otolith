@@ -48,15 +48,16 @@ calculate the by-class statistics (recall, precision and
 specificity)
 }
 \details{
-Recall = Sensitivity = tp / (tp + fn) Precision = tp / (tp
-+ fp) Specificity = tn / (tn + fp) and, tp= true positive,
-tn=true negative, fp=false positive, fn=false negative
-Please refer to reference for detailed explanation.
+\itemize{ \item Recall = Sensitivity = tp / (tp + fn) \item
+Precision = tp / (tp + fp) \item Specificity = tn / (tn +
+fp) } and, tp= true positive, tn=true negative, fp=false
+positive, fn=false negative Please refer to reference for
+detailed explanation.
 }
 \references{
 Sokolova, M., & Lapalme, G. (2009). A systematic analysis
 of performance measures for classification tasks.
-Information Processing & Management, 45(4), 427-437.
+\emph{Information Processing & Management}, 45(4), 427-437.
 }
 \seealso{
 Similar: \code{\link{kfcv}}

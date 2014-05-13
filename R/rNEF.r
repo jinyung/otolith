@@ -1,9 +1,9 @@
 #' Normalized elliptical Fourier analysis routine
 #' 
-#' @description a wrapper functions using the codes from J Claude's book,  
+#' @description A wrapper functions using the codes from J Claude's book,  
 #'  for routine use to run normalized elliptical Fourier analysis.
 #' @param A p x k x n array of raw semilandmarks configurations
-#' @param plotpca Logical. Whether to plot the PCA for quick preliminary view. 
+#' @param plotpca logical. Whether to plot the PCA for quick preliminary view. 
 #'  Plot first 3 PCs. 
 #' @param class factor giving the species/grouping, used for plotting purpose, 
 #'  e.g. using sp value from \code{\link{routine1}}. 
@@ -16,7 +16,7 @@
 #' @seealso 
 #'  \code{\link{rGPA}}
 #' @export
-#' @references Claude J. (2008). Morphometrics with R. Springer.
+#' @references Claude J. (2008). \emph{Morphometrics with R}. Springer.
 
 rNEF <- function (A, plotpca=FALSE, class) {
   n <- dim(A)[3]
