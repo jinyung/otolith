@@ -1,50 +1,53 @@
 \name{runmacro}
 \alias{runmacro}
-\title{Launch ImageJ outline extraction macro}
+\title{Launch ImageJ shape indices macro}
 \usage{
-runmacro(imagej = c("built-in", "select"), input = NULL, output = NULL)
+runmacro(imagejdir, opendir, savedir, threshold = 30)
 }
 \arguments{
-  \item{imagej}{path to folder that contain the ImageJ's
-  "ij.jar" file, see details.}
+  \item{imagejdir}{path to folder that contain the ImageJ's
+  "ij.jar" file, see details}
 
-  \item{input}{path to folder that contain the otolith
-  images to be processed, see details.}
+  \item{opendir}{path to folder that contain the otolith
+  images to be processed, see details}
 
-  \item{output}{path to folder that the output files will
+  \item{savedir}{path to folder that the output files will
   be saved, see details.}
+
+  \item{threshold}{numeric. threshold value to be passed to
+  ImageJ. range within 0-255, which is different from the
+  \code{link{img2landmark}} that use a 0-1 range.}
 }
 \value{
-For each image, there will be three files generated:
-\tabular{ll}{ 1. \code{<image name>_outline.tif}\tab :
-image showing the outline for inspection\cr 2. \code{<image
-name>_xycoords.txt}\tab : outline XY coordinates\cr 3.
-\code{<image name>_shapedescriptors.txt}\tab : containing
-calculated shape descriptor indices\cr }
+For each image, a file named \code{<image
+name>_shapedescriptors.txt} will be generated, containing
+calculated shape descriptor indices
 }
 \description{
 This function launches ImageJ macro from shell, the macro
-will extract the outline from otolith images.
+will calculate dimensionless shape indices from otolith
+images.
 }
 \details{
-When \code{imagej="built-in"} (the default), ImageJ is
-launched from the ImageJ bundled within the package (only
-works with the installation of package-zip that bundled
-with ImageJ), otherwise, when \code{imagej="select"}, GUI
-selector will pop out, and user can choose the folder to
-locate ImageJ.  Note: when using package-zip without ImageJ
-bundled with, user need to put the
-\code{batch_outline_extraction_macro.ijm} file into the
-"macro" folder of ImageJ or Fiji. When \code{input=NULL} or
-\code{output=NULL} (the default), GUI selector will pop
-out, and user can choose the folder, otherwise, character
-input of path is also accepted.
+if \code{imagejdir} is not given, this function will check
+whether ImageJ can be launched from the ImageJ bundled
+within the package (only works with the installation of
+package-zip that bundled with ImageJ), if not, a GUI folder
+selector will pop out to prompt user to choose the folder
+to locate ImageJ. Note: when using package-zip without
+ImageJ bundled with, user need to put the
+\code{batch_shape_indices_macro.ijm} file into the "macro"
+folder of ImageJ or Fiji, and also put the Particle 8
+plugin into the plugin folder, see ref.  When
+\code{opendir} or \code{savedir} are not given, a GUI
+selector will pop out, and user can choose the folder.
 }
 \note{
 Because \code{choose.dir()} is used in the function, which
 is Windows specific, this function works in Windows only.
-The shell command is also specific to Windows, not tested
-under other OS.
+User is advised to give the path of directories manually if
+it doesn't work.  The shell command was tested under
+Windows only, may not work in other OS.
 }
 \references{
 The Particle 8 ImageJ's plugin at G Landhini's website

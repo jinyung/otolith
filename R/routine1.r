@@ -1,8 +1,10 @@
 #' Process shape descriptor files
 #' 
 #' @description A wrapper function to do the routine of reading the files from 
-#'  imagej output and combine the descriptor files into a single file. 
-#' @param imagejfolder path of the folder containg the shape descriptor files
+#'  imagej output (from \code{\link{runmacro}}) and combine the descriptor files 
+#'  into a single file. 
+#' @param imagejdir path of the folder containing the shape descriptor files. 
+#'  if not given, a GUI folder selector will prompt user to select (if run in Windows)
 #' @param write logical. whether to save a new file of combined descriptor.
 #' @param plot logical. whether to plot PCA for preliminary assessment of 
 #'  descriptor data. Only graphical output of first 3 PCs.
@@ -11,22 +13,28 @@
 #'  from the file name to become the species name, if \code{label=TRUE}. The first
 #'  is the starting position, second is the last position of character to extract. 
 #' @return A dataframe of combined shape descriptor data
-#' @seealso \code{\link{routine2}}
+#' @seealso \code{\link{runmacro}}
 #' @export
 
-routine1 <- function(imagejfolder, write=TRUE, plot=FALSE, label=TRUE, extract=c(1, 6)) {
-  setwd(imagejfolder)
-  deslist <- list.files(pattern= "_shapedescriptors.txt")  
+routine1 <- function(imagejdir, write=TRUE, plot=FALSE, label=TRUE, 
+                     extract=c(1, 6)) {
+  if (missing(imagejdir)) {
+    if (Sys.info()['sysname'] == "Windows")
+      imagejdir <- choose.dir(default = getwd(), 
+                            caption = "Select folder containing the <name>_shapedescriptors.txt files")
+    else
+      stop("you need to provide path to folder containing the shape descriptor files")
+  }
+  deslist <- list.files(imagejdir, pattern= "_shapedescriptors.txt")  
   nlist <- gsub("_shapedescriptors.txt", "", deslist) 
   # create shapedescriptor dataframe
   desdata <- NULL
   cat("------Reading shape descriptor files------\n")
   for (i in 1:length(deslist)) {
-    temp <- read.table(paste(imagejfolder, 
+    temp <- read.table(paste(imagejdir, 
                              deslist[i], sep="/"), comment.char="")
     desdata <- rbind(desdata, temp)
     cat(paste(i, "  ", nlist[i], "\n"))
-    flush.console()
   }
   cat("---Reading shape descriptor files ended---\n")  
   # write the combined files into a new csv file
@@ -43,8 +51,8 @@ routine1 <- function(imagejfolder, write=TRUE, plot=FALSE, label=TRUE, extract=c
     write.csv(desdata, file=filename1, row.names=FALSE)
     write.csv(desdatan, file=filename2, row.names=FALSE)
     cat("\nThe combined file is saved at:\n1) ", 
-        paste(imagejfolder,filename1, sep="/"),
-        "\n2) ", paste(imagejfolder,filename2, sep="/"), "\n\n")
+        paste(imagejdir, filename1, sep="/"),
+        "\n2) ", paste(imagejdir, filename2, sep="/"), "\n\n")
   }
   if (plot == TRUE) {
     pca <- prcomp(desdatan[, 2:13], scale.=TRUE)

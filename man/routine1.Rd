@@ -2,12 +2,13 @@
 \alias{routine1}
 \title{Process shape descriptor files}
 \usage{
-routine1(imagejfolder, write = TRUE, plot = FALSE, label = TRUE,
+routine1(imagejdir, write = TRUE, plot = FALSE, label = TRUE,
   extract = c(1, 6))
 }
 \arguments{
-  \item{imagejfolder}{path of the folder containg the shape
-  descriptor files}
+  \item{imagejdir}{path of the folder containing the shape
+  descriptor files.  if not given, a GUI folder selector
+  will prompt user to select (if run in Windows)}
 
   \item{write}{logical. whether to save a new file of
   combined descriptor.}
@@ -30,10 +31,10 @@ A dataframe of combined shape descriptor data
 }
 \description{
 A wrapper function to do the routine of reading the files
-from imagej output and combine the descriptor files into a
-single file.
+from imagej output (from \code{\link{runmacro}}) and
+combine the descriptor files into a single file.
 }
 \seealso{
-\code{\link{routine2}}
+\code{\link{runmacro}}
 }
 
