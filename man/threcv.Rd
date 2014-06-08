@@ -9,7 +9,8 @@ threcv(X, Y, saveplot = FALSE, plotsize = 1000, run = 30, k = 5)
   object (the \code{score} value)}
 
   \item{Y}{a factor giving the grouping, e.g. the \code{sp}
-  value from \code{\link{routine1}} object}
+  value from \code{\link{routine1}} object or obtain from
+  \code{\link{getclass}}}
 
   \item{saveplot}{logical. The plot will be saved if
   \code{TRUE}, and no plot is displayed in the window. Note
@@ -29,7 +30,7 @@ accuracy and the total reported prediction percentage over
 a range of threshold values.
 }
 \description{
-to estimate the effect of setting a threshold on posterior
+To estimate the effect of setting a threshold on posterior
 probability to reject "unsure" predictions.
 }
 \details{
@@ -50,7 +51,7 @@ arbitrary and depends on one's objectives.
 \references{
 Beleites, C., & Salzer, R. (2008). Assessing and improving
 the stability of chemometric models in small sample size
-situations.  Analytical and Bioanalytical Chemistry,
+situations.  \emph{Analytical and Bioanalytical Chemistry},
 390(5), 1261-1271.
 }
 \seealso{
