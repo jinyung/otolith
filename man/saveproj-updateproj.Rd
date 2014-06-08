@@ -1,17 +1,21 @@
-\name{saveproj}
+\name{saveproj / updateproj}
 \alias{saveproj}
-\title{Save a project}
+\alias{updateproj}
+\title{Save / update project}
 \usage{
 saveproj(name, landmark = NULL, des = NULL, gpa = NULL, nef = NULL,
   pc = NULL, har = NULL, des.threshold = NULL, nef.threshold = NULL,
   gpa.threshold = NULL)
+updateproj(name, landmark = NULL, des = NULL, gpa = NULL, nef = NULL,
+  pc = NULL, har = NULL, des.threshold = NULL, nef.threshold = NULL,
+  gpa.threshold = NULL)
 }
 \arguments{
-  \item{name}{character. file name of the project, should
-  end with \code{".rds"}}
+  \item{name}{character or path. file name/ path of the project to be saved or to 
+  be updated, should end with \code{".rds"}}
 
   \item{landmark}{p x k x n array of semi-landmarks, e.g.
-  \code{A} value of \code{\link{routine2}}.}
+  \code{landmark} value of \code{\link{img2landmark}}.}
 
   \item{des}{a \code{\link{routine1}} object}
 
@@ -35,16 +39,19 @@ saveproj(name, landmark = NULL, des = NULL, gpa = NULL, nef = NULL,
   determined by \code{\link{threcv}}}
 }
 \value{
-a \code{.rds} file saved
+a \code{.rds} file saved or updated.
 }
 \description{
-this function save the processed semi-landmarks, shape
+save/ update the processed semi-landmarks, shape
 descriptor data, GPA/ EFA transformed data, optimized
 parameters into a \code{.rds} file.
 }
-\seealso{
-Similar: \code{\link{readRDS}}, \code{\link{updateproj}}
+\details{
+For \code{updateproj}, the objects assigned with new values will be overwrited
+with new ones, the rest will remain the same. The current version only support overwrite(!) the whole selected object, not append.
 
+}
+\seealso{
+To read the project, use: \code{\link{readRDS}}
 Which this function wraps: \code{\link{saveRDS}}
 }
-

@@ -36,9 +36,11 @@
 #'  45(4), 427-437.
 
 kfcv2 <- function(X, Y, method=c("lda", "plsda", "tree"),
-                  k=5, threshold=NULL, ncomp=NULL) {
+                  k=5, threshold, ncomp) {
   # create the folds
   alltestingindices <- kfcv.testing(dim(X)[1], k=k)
+  # some processing
+  method <- match.arg(method)
   Y <- factor(Y)
   dat <- data.frame(X)
   dat$predictor <- as.matrix(X) # matrix can be saved as a variable in dataframe, 
@@ -72,7 +74,7 @@ kfcv2 <- function(X, Y, method=c("lda", "plsda", "tree"),
       prediction.temp <- predict(mod.i, test)
       prediction.i <- prediction.temp$class
       # add in posterior thresholding 25.4.14
-      if (!is.null(threshold)) {
+      if (!missing(threshold)) {
         posterior <- prediction.temp$posterior
         posmax <- apply(posterior, 1, max)
         prediction.i[which (posmax < threshold)] <- NA 
@@ -83,10 +85,11 @@ kfcv2 <- function(X, Y, method=c("lda", "plsda", "tree"),
       }
     } else if (method == "plsda") {
       require(mixOmics)
-      if(is.null(ncomp) == TRUE){ncomp <- trainlength - 1}
+      if(missing(ncomp))
+        ncomp <- trainlength - 1
       mod.i <- plsda(X=train$predictor, Y=train$class, ncomp=ncomp)
       prediction.temp <- predict(mod.i, test$predictor)
-      prediction.i<-levels(train$class)[prediction.temp$class$max.dist[, ncomp]]
+      prediction.i<- levels(train$class)[prediction.temp$class$max.dist[, ncomp]]
       prediction.i <- factor(prediction.i, levels=levels(Y))
     } else if (method == "tree"){
       require(tree)
@@ -104,7 +107,7 @@ kfcv2 <- function(X, Y, method=c("lda", "plsda", "tree"),
     }
     misclass.rate.i <- wrongsum.i / length(alltestingindices[[i]]) * 100
     misclass[i] <- misclass.rate.i 
-    if (!is.null(threshold))
+    if (!missing(threshold))
       total.pred[i] <- total.pred.i    
     tempstat.i <- tempstat
     # calculate the stats
@@ -128,5 +131,5 @@ kfcv2 <- function(X, Y, method=c("lda", "plsda", "tree"),
     stat[, , i] <- tempstat.i  
     conmat[, , i] <- tempcon
   }
-  return(list(misclass=misclass, stat=stat, conmat=conmat, total=total.pred))
+  invisible(list(misclass=misclass, stat=stat, conmat=conmat, total=total.pred))
 }

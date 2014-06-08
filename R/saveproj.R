@@ -2,9 +2,9 @@
 #' 
 #' @description this function save the processed semi-landmarks, shape descriptor 
 #'  data, GPA/ EFA transformed data, optimized parameters into a \code{.rds} file.
-#' @param name character. file name of the project, should end with \code{".rds"}
-#' @param landmark p x k x n array of semi-landmarks, e.g. \code{A} value of 
-#'  \code{\link{routine2}}.
+#' @param name character or path. file name/ path of the project, should end with \code{".rds"}
+#' @param landmark p x k x n array of semi-landmarks, e.g. \code{landmark} value of 
+#'  \code{\link{img2landmark}}.
 #' @param des a \code{\link{routine1}} object 
 #' @param nef a \code{\link{rNEF}} object
 #' @param gpa a \code{\link{rGPA}} object

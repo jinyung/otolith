@@ -8,15 +8,15 @@
 #' @export
 #' @references
 #' Ponton, D. (2006). Is geometric morphometrics efficient for comparing 
-#' otolith shape of different fish species?. Journal of Morphology, 
+#' otolith shape of different fish species?. \emph{Journal of Morphology}, 
 #' 267(6), 750-757.
 #' 
 #' Sheets, H. D., Covino, K. M., Panasiewicz, J. M., & Morris, S. R. (2006). 
 #' Comparison of geometric morphometric outline methods in the discrimination 
-#' of age-related differences in feather shape. Frontiers in Zoology, 3(1), 1-12.
+#' of age-related differences in feather shape. \emph{Frontiers in Zoology}, 3(1), 1-12.
 #' 
-#' @note produce errorneous results for complex outline with  high outline curvature 
-#'  especially at the 'excisura' site.
+#' @note produce errorneous results for complex outline with  high outline curvature, 
+#'  e.g. at the 'excisura' site of some fish otoliths.
 
 comb <- function (outdata, nd=50, plot=FALSE, label=FALSE) {
   # get the end points
@@ -76,12 +76,12 @@ comb <- function (outdata, nd=50, plot=FALSE, label=FALSE) {
     points(endpoints, pch=21, bg="red")
     lines(endpoints, col="red", lty=3)
     points(rbind(topsemiland, botsemiland), pch=21, bg="blue")
-    for (i in 1:(nd-1))
-      lines(rbind(topsemiland[i, ], botsemiland[i, ]),  lty=3, col="blue")
+    for (i in 1:(nd - 1))
+      lines(rbind(topsemiland[i, ], botsemiland[i, ]), lty=3, col="blue")
     if (label) {
       text(topsemiland, labels=2:nd,  pos=3,  cex=0.5)
-      text(botsemilandR, labels=(1:(nd-1)) + nd + 1, pos=1, cex=0.5)
-      text(endpoints, labels=c(1, nd+1), pos=c(2, 4), cex=0.5)
+      text(botsemilandR, labels=(1:(nd - 1)) + nd + 1, pos=1, cex=0.5)
+      text(endpoints, labels=c(1, nd + 1), pos=c(2, 4), cex=0.5)
     }
   }
   return(landmark)

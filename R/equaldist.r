@@ -1,15 +1,16 @@
 #' Sample 'equally spaced'-style curvilinear semi-landmarks
 #' 
-#' @description Sample points along outline. Outline is divided into two parts 
+#' @description Outline is divided into two parts 
 #'  by larget PC axis, semi-landmarks are then sampled in equal intervals in 
 #'  each part. 
-#' @param outdata outline data. A matrix consists of xy coordinates
+#' @param outdata outline data. a matrix consists of xy coordinates. works on
+#'  both 4-connected and 8-connected outline.
 #' @param nd numeric. Number of equally spaced divides along the outline for each part of the outline. 
 #' @param plot logical. Whether to plot
 #' @param label logical. Whether to label the plot
 #' @return semi-landmarks sampled and the plot of the sampled 
 #'  semi-landmarks on the outline if \code{plot=TRUE} 
-#' @seealso \code{\link{routine2}}
+#' @seealso \code{\link{comb}}
 #' @export
 
 equaldist <- function (outdata,  nd=50,  plot=FALSE,  label=FALSE){

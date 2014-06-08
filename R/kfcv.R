@@ -12,12 +12,13 @@
 #' @param threshold optional. A numeric value between 0-1 to set the threshold of 
 #'  posterior probility. Any class prediction with posterior probility lower than this 
 #'  value will be \code{NA}-ed and not reported.  
-#' @param ncomp argument passed to \code{\link{plsda}}.Used only when \code{method="plsda"}.
+#' @param ncomp argument passed to \code{\link[mixOmics]{plsda}}.Used only 
+#'  when \code{method="plsda"}.
 #' @return 
 #'  \item{misclass}{vector of k values of misclassification rate in percent 
 #'    resulted from each fold of testing} 
-#'  \item{total}{total number of prediction after excluding the ones below 
-#'  threshold, if \code{threhold != NULL}}
+#'  \item{total}{total number of prediction after excluding the ones lower than 
+#'  threshold, if \code{threshold} value is given}
 #' @seealso 
 #'  Similar: \code{\link{kfcv2}}
 #'  
@@ -30,8 +31,9 @@
 #' @export
 
 kfcv <- function(X, Y, method=c("lda", "plsda", "tree"), 
-                 k=5, threshold=NULL, ncomp=NULL) {
+                 k=5, threshold, ncomp) {
   alltestingindices <- kfcv.testing(dim(X)[1], k=k)
+  method <- match.arg(method)
   Y <- factor(Y)
   dat <- data.frame(X)
   dat$predictor <- as.matrix(X)
@@ -42,8 +44,8 @@ kfcv <- function(X, Y, method=c("lda", "plsda", "tree"),
     testingindices <- alltestingindices[[i]]
     train <- dat[-testingindices, ]
     test <- dat[testingindices, ]
-    testlength<- length(levels(test$class)) # no more important as droplevels() not use here, retained anyway.      
-    trainlength<- length(levels(train$class))
+    testlength <- length(levels(test$class)) # no more important as droplevels() not use here, retained anyway.      
+    trainlength <- length(levels(train$class))
     if (method == "lda") {
       require(MASS)
       mod.i<- lda(class ~ predictor, data=train,
@@ -51,7 +53,7 @@ kfcv <- function(X, Y, method=c("lda", "plsda", "tree"),
       prediction.temp <- predict(mod.i, test)
       prediction.i <- prediction.temp$class
       # add in posterior thresholding 25.4.14
-      if (!is.null(threshold)) {
+      if (!missing(threshold)) {
         posterior <- prediction.temp$posterior
         posmax <- apply(posterior, 1, max)
         #class predicted with posterior < thereshold are NA-ed.  
@@ -62,7 +64,7 @@ kfcv <- function(X, Y, method=c("lda", "plsda", "tree"),
       }
     } else if (method == "plsda") {
       require(mixOmics)
-      if (is.null(ncomp) == TRUE) 
+      if (missing(ncomp)) 
         ncomp<- trainlength-1
       mod.i <- plsda(X=train$predictor, Y=train$class, ncomp=ncomp)
       prediction.temp <- predict(mod.i, test$predictor)
@@ -82,7 +84,7 @@ kfcv <- function(X, Y, method=c("lda", "plsda", "tree"),
     }
     misclass.rate.i <- wrongsum.i / length(alltestingindices[[i]]) * 100
     misclass[i] <- misclass.rate.i
-    if (!is.null(threshold))
+    if (!missing(threshold))
       total.pred[i] <- total.pred.i      
   }
   return(list(misclass=misclass, total=total.pred))

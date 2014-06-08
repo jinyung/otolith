@@ -7,7 +7,7 @@
 #' @inheritParams mrkfcv
 #' @return 
 #'  \item{accuracy}{cross-validated accuracy for the tested classifier, 
-#'    resulted from the average of \code{k x ru}n numbers of accuracy generated 
+#'    resulted from the average of \code{k x run} numbers of accuracy generated 
 #'    by the function}
 #'  \item{accu.sd}{standard deviation for the accuracy, calculated from 
 #'    the \code{k x run} number of results}  
@@ -27,8 +27,8 @@
 #'  Which this function wraps: \code{\link{kfcv2}}
 #' @export
 
-mrkfcv2 <- function(X, Y, method="lda", k=5, run=100, suppress=FALSE, 
-                    threshold=NULL, ncomp=NULL) {
+mrkfcv2 <- function(X, Y, method=c("lda", "tree", "plsda"), k=5, run=100, 
+                    threshold, ncomp, suppress=FALSE) {
   misclass <- numeric()
   total.pred <- NULL
   class.level <- levels(Y)
@@ -41,7 +41,7 @@ mrkfcv2 <- function(X, Y, method="lda", k=5, run=100, suppress=FALSE,
   ConMat <- array (data=NA, dim=c(class.length, class.length, run * k), 
             dimnames= list(class.level, class.level, NULL))
   #progress bar
-  if (suppress == FALSE) {
+  if (!suppress) {
     cat("\n **Running ", run, "-runs of ", k, "-fold cross-validation:\n\n", 
         sep="")
     pb <- txtProgressBar(1, run, style=3, char="|")  
@@ -52,7 +52,7 @@ mrkfcv2 <- function(X, Y, method="lda", k=5, run=100, suppress=FALSE,
     total.pred[(p * k-(k-1)):(p * k)] <- run.p$total    
     stat.array[, , (p * k - (k - 1)):(p * k)] <- run.p$stat
     ConMat[, , (p * k - (k - 1)):(p * k)] <- run.p$conmat
-    if (suppress == FALSE)
+    if (!suppress)
       setTxtProgressBar(pb, p)
   }
   stat.sum <- round(apply(stat.array, c(1, 2), mean, na.rm=T), 2)
@@ -61,9 +61,15 @@ mrkfcv2 <- function(X, Y, method="lda", k=5, run=100, suppress=FALSE,
   conmatF <- round(apply(ConMat, c(1, 2), mean, na.rm=T), 2)
   accuracy <- round(100 - mean(misclass), 2)
   accu.sd <- round(sd(misclass), 2)
-  total.sd <- round(sd(total.pred), 2)
-  total.pred <- round(mean(total.pred), 2)
+  if (!missing(threshold)) {
+    total <- round(mean(total.pred), 2)
+    total.sd <- round(sd(total.pred), 2)
+    return.list <- list(accuracy=accuracy, accu.sd=accu.sd, stat.sum=stat.sum, 
+                        conmat=conmatF, total=total.pred, total.sd=total.sd)
+  } else {
+    return.list <- list(accuracy=accuracy, accu.sd=accu.sd, stat.sum=stat.sum, 
+                        conmat=conmatF)
+  }  
   cat("\n\n")
-  return (list(accuracy=accuracy, accu.sd=accu.sd, stat.sum=stat.sum, 
-              conmat=conmatF, total=total.pred, total.sd=total.sd))
+  return (return.list)
 }
