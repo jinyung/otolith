@@ -4,8 +4,8 @@
 #' @param path path of a single image
 #' @param resize logical. whether to resize the picture
 #' @param width width to resize to, in pixel. used only if \code{resize=TRUE}.
-#'  if \code{resize=TRUE} and width not given, image is resize to 1280px in width
-#'  by default
+#'  if \code{resize=TRUE} and width is not given, image is resized to 
+#'  1280px in width by default
 #' @return an image matrix
 #' @importFrom jpeg readJPEG
 #' @importFrom tiff readTIFF
@@ -13,14 +13,14 @@
 #' @details All images loaded are converted into gray scale. Image format is 
 #'  automatically detected from the extension. Supported formats include \code{.jpg}, 
 #'  \code{.tif}, and \code{.png}. This function is used in place of 
-#'  \code{\link[EBImage]{writeImage}} for this package to speed up the reading of
-#'  image.
+#'  \code{\link[EBImage]{readImage}} (from \code{EBImage}) for this package to 
+#'  speed up the reading of image.
 #' @seealso 
 #'  Which this function wraps: \code{\link[jpeg]{readJPEG}}, 
 #'  \code{\link[tiff]{readTIFF}}, \code{\link[png]{readPNG}} 
 #' @export
 
-load_image <- function (path, resize=TRUE, width) {
+loadimg <- function (path, resize=TRUE, width) {
   imgname <- unlist(strsplit(path, "[.]")) # split at "."
   imgtype <- rev(imgname)[1] # get the last str segment after "."
   if (imgtype == "jpg") {

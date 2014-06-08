@@ -1,17 +1,19 @@
 #' Extract outline
 #' 
 #' @description Extract outline from a fish otolith image
-#' @param img an image array read by \code{\link{load_image}}
-#' @param threshold numeric. value < 1.
+#' @param img an image array read by \code{\link{loadimg}}
+#' @param threshold numeric. value of range 0-1 to set the theshold for conversion
+#'  into binary image.
 #' @param plot \code{no} = no plot; \code{overlay} = plot of outline overlaid 
 #'  on image; \code{plain} = plot of plain outline
 #' @return a matrix of outline coords. note the outline is in 8-connected format.
 #' @importFrom EBImage bwlabel computeFeatures.shape rmObjects ocontour getNumberOfFrames
 #' @seealso
 #' Which this function wraps: \code{\link[EBImage]{ocontour}}
+#' Function that wraps this function: \code{\link{img2landmark}}
 #' @export
 
-extractOutline <- function (img, threshold=0.3,
+extractout <- function (img, threshold=0.3,
                             plot=c("no", "overlay", "plain")) {
   require(EBImage)
   # simple threshoding
