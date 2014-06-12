@@ -2,7 +2,7 @@
 \alias{selectdim}
 \title{Select training data dimension}
 \usage{
-selectdim(train, har = NULL, pc = NULL)
+selectdim(train, har, pc)
 }
 \arguments{
   \item{train}{Matrix of EFA coefficients or PC scores
@@ -10,10 +10,10 @@ selectdim(train, har = NULL, pc = NULL)
   function (called as \code{object$coeff} or
   \code{object$score}) to be trimmed down}
 
-  \item{har}{Numeric. Number of harmonics (for coefficient
+  \item{har}{numeric. Number of harmonics (for coefficient
   matrix)}
 
-  \item{pc}{Numeric. Number of pc (for PC score matrix)}
+  \item{pc}{numeric. Number of pc (for PC score matrix)}
 }
 \value{
 coefficients/ PC scores of selected number ready to be used

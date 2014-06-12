@@ -8,8 +8,7 @@
 #' @param plotpca logical. whether to plot PCA for preliminary assessment of 
 #'  the data
 #' @param class factor giving the species/grouping, used for plotting purpose, 
-#'  e.g. using sp value from \code{\link{routine1}}. 
-#'  Used only when \code{plotpca=TRUE}
+#'  e.g. using sp value from \code{\link{routine1}} or using \code{\link{getclass}}
 #' @return 
 #'  \item{tanc}{Procrustes aligned configurations projected onto tangent shape space}
 #'  \item{size}{centroid size}  
@@ -29,7 +28,10 @@
 #'  \code{\link{otopred}} function (6 May 2014).
 
 rGPA <- function(A, fix=NULL, plotpca=FALSE, class) {
+  # check
   require(Morpho)
+  if (missing(class))
+    stop("please provide class, you can use getclass()")
   p <- dim(A)[1]
   n <- dim(A)[3]
   slide <- 1:p
@@ -46,7 +48,7 @@ rGPA <- function(A, fix=NULL, plotpca=FALSE, class) {
   if (plotpca) {
     plotpca(pca, size=size, class=class)
   }
-  rdist <- sprdist(gpa$rotated, group=class)
+  rdist <- sprdist(gpa$rotated, class=class)
   invisible(list(tanc=tanc, size=size, expvar= gpa$Variance, 
               score=gpa$PCscores, rdist=rdist$stat, pca=pca, 
               meanshape=rdist$meanshape, mshape=gpa$mshape))

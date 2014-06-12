@@ -10,6 +10,7 @@
 #' @importFrom jpeg readJPEG
 #' @importFrom tiff readTIFF
 #' @importFrom png readPNG
+#' @importFrom EBImage resize
 #' @details All images loaded are converted into gray scale. Image format is 
 #'  automatically detected from the extension. Supported formats include \code{.jpg}, 
 #'  \code{.tif}, and \code{.png}. This function is used in place of 
@@ -42,6 +43,7 @@ loadimg <- function (path, resize=TRUE, width) {
   x <- dim(img)[1]
   y <- dim(img)[2]
   if (resize == TRUE) {
+    require(EBImage)
     if (missing(width)) {
       if ( x > 1280)
         img <- resize(img, w = 1280)

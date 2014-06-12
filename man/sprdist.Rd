@@ -2,18 +2,18 @@
 \alias{sprdist}
 \title{Calculate within species Procrustes distance}
 \usage{
-sprdist(A, group)
+sprdist(A, class)
 }
 \arguments{
-  \item{A}{A p x k x n array of landmark configuration}
+  \item{A}{p x k x n array of landmark configuration}
 
-  \item{group}{A factor giving the species or the grouping
+  \item{class}{a factor giving the species or the grouping
   of \code{A}, must be of same length and order as
-  \code{A}}
+  \code{A}. can be obtained using \code{\link{getclass}}}
 }
 \value{
 \item{stat}{matrix of result of calculated within species
-Procrustes distance} \item{meanshape}{Array of meanshape
+Procrustes distance} \item{meanshape}{array of meanshape
 configurations of each species/ group}
 }
 \description{
@@ -23,7 +23,7 @@ Riemannian, as used by \code{\link{Morpho}}) distance
 \seealso{
 function that wraps this function: \code{\link{rGPA}}
 
-which this function wraps: \code{\link{kendalldist}}
-\code{\link{rotonto}} \code{\link{mshape}}
+which this function wraps: \code{\link{kendalldist}},
+\code{\link{rotonto}}, \code{\link{mshape}}
 }
 

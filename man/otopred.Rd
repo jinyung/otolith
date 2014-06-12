@@ -53,7 +53,7 @@ otopred(project, query, type = c("nef", "gpa", "des"), method = c("lda",
 
   \item{write}{logical. whether to save the result.}
 
-  \item{...}{other arguments that can be paseed to
+  \item{...}{other arguments that can be passed to
   \code{\link{otosearch}}}
 }
 \value{

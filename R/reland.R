@@ -19,9 +19,9 @@
 #' @importFrom secr flip
 #' @export
 
-reland <- function (landdata, type=c("ori", "rev", "flip", "fliprev")){
+reland <- function (landdata, type=c("ori", "rev", "flip", "fliprev")) {
   require(secr)
-  nd <-dim(landdata)[1] / 2
+  nd <- dim(landdata)[1] / 2
   landdatanew <- landdataF <- landdataFN <- 
     array(data = NA,  dim=c(dim(landdata)[1], 2))
   landdataF <- flip(landdata, lr=TRUE)
@@ -39,8 +39,7 @@ reland <- function (landdata, type=c("ori", "rev", "flip", "fliprev")){
     else if (type == "rev")
       landdata <- landdata
     else
-      stop("incorrect type, please choose from \"ori\",  
-           \"rev\",  \"flip\" or \"fliprev\"")
+      stop("incorrect type, please choose from \"ori\", \"rev\", \"flip\" or \"fliprev\"")
     landdatanew[1, ] <- landdata[nd + 1, ]
     landdatanew[nd + 1, ] <- landdata[1, ]
     landdatanew[2:nd, ] <- landdata [(nd + 2):(nd * 2),  ]

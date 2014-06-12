@@ -3,8 +3,8 @@
 #' @description For preliminary visual assessment of data groups in PCA. 
 #' @param pca \code{\link{prcomp}} object 
 #' @param size optional. numeric. geometric size, e.g. \code{size} value from 
-#' `\code{\link{rGPA}}
-#' or \code{\link{rNEF}}. size is overlaid as bubble size in the plot.
+#'  \code{\link{rGPA}} or \code{\link{rNEF}}. size is overlaid as bubble size 
+#'  in the plot.
 #' @param class factor. giving the species/grouping. NOTE: currently only 
 #'  support up to 12 levels. 
 #' @param saveplot logical. whether to save the plot
@@ -16,6 +16,7 @@
 #' @seealso 
 #'  Function that wraps this function: \code{\link{rNEF}}, \code{\link{rGPA}}, 
 #'  \code{\link{routine1}}
+#' @keywords internal  
 
 plotpca <- function (pca, size=NULL, sizeamp=3, class, saveplot=FALSE, plotsize=1000) {
   if (length(levels(class)) > 12)
@@ -27,7 +28,7 @@ plotpca <- function (pca, size=NULL, sizeamp=3, class, saveplot=FALSE, plotsize=
   } else {
     radius <- 1
   }
-  bg <- rainbow(length[levels(class)])[as.numeric(class)]
+  bg <- rainbow(length(levels(class)))[as.numeric(class)]
   if (saveplot == FALSE) {
     dev.new(width=10,  height=10)
   } else {

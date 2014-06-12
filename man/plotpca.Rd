@@ -9,7 +9,7 @@ plotpca(pca, size = NULL, sizeamp = 3, class, saveplot = FALSE,
   \item{pca}{\code{\link{prcomp}} object}
 
   \item{size}{optional. numeric. geometric size, e.g.
-  \code{size} value from `\code{\link{rGPA}} or
+  \code{size} value from \code{\link{rGPA}} or
   \code{\link{rNEF}}. size is overlaid as bubble size in
   the plot.}
 
@@ -35,4 +35,5 @@ For preliminary visual assessment of data groups in PCA.
 Function that wraps this function: \code{\link{rNEF}},
 \code{\link{rGPA}}, \code{\link{routine1}}
 }
+\keyword{internal}
 

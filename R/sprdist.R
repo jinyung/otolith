@@ -2,26 +2,28 @@
 #' 
 #' @description A wrapper to calculate the within species Procrustes 
 #'  (or Riemannian, as used by \code{\link{Morpho}}) distance
-#' @param A A p x k x n array of landmark configuration
-#' @param group A factor giving the species or the grouping of \code{A}, 
-#'  must be of same length and order as \code{A} 
+#' @param A p x k x n array of landmark configuration
+#' @param class a factor giving the species or the grouping of \code{A}, 
+#'  must be of same length and order as \code{A}. can be obtained using
+#'  \code{\link{getclass}}
 #' @return 
 #'  \item{stat}{matrix of result of calculated within species Procrustes distance}
-#'  \item{meanshape}{Array of meanshape configurations of each species/ group}  
+#'  \item{meanshape}{array of meanshape configurations of each species/ group}  
 #' @importFrom Morpho kendalldist rotonto
 #' @seealso 
 #'  function that wraps this function: \code{\link{rGPA}}
 #'  
-#'  which this function wraps: \code{\link{kendalldist}}  \code{\link{rotonto}} 
+#'  which this function wraps: \code{\link{kendalldist}},  \code{\link{rotonto}}, 
 #'   \code{\link{mshape}}
 #' @export
 
 
-sprdist <- function(A, group) {
+sprdist <- function(A, class) {
   require(Morpho)
-  group <- factor(group)
-  grlevel <- levels(group)
-  sdist.mean <- numeric(length=length(grlevel)) # to save dist for each group 
+  if (!is.factor(class))
+    class <- factor(class)
+  grlevel <- levels(class)
+  sdist.mean <- numeric(length=length(grlevel)) # to save dist for each class 
   names(sdist.mean) <- grlevel
   sdist.min <- sdist.mean
   sdist.max <- sdist.mean
@@ -30,7 +32,7 @@ sprdist <- function(A, group) {
   for (i in 1:length(grlevel)) {
     cat("calculating ", grlevel[i], "\n")
     flush.console()
-    Aindex <- which(group == grlevel[i])
+    Aindex <- which(class == grlevel[i])
     tempA <- A[, , Aindex]
     rdist <- numeric() # temporary to save all dist of a species
     ms <- mshape(tempA) 

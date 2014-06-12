@@ -17,8 +17,7 @@ rGPA(A, fix = NULL, plotpca = FALSE, class)
 
   \item{class}{factor giving the species/grouping, used for
   plotting purpose, e.g. using sp value from
-  \code{\link{routine1}}.  Used only when
-  \code{plotpca=TRUE}}
+  \code{\link{routine1}} or using \code{\link{getclass}}}
 }
 \value{
 \item{tanc}{Procrustes aligned configurations projected

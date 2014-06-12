@@ -2,7 +2,7 @@
 \alias{getclass}
 \title{Extract class name from landmark configurations}
 \usage{
-getclass(landmark, extract)
+getclass(landmark, extract = c(1, 6))
 }
 \arguments{
   \item{landmark}{p x k x n array of landmark. n dimension

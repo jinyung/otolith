@@ -7,7 +7,7 @@
 #' @return class name
 #' @export
 
-getclass <- function(landmark, extract) {
+getclass <- function(landmark, extract=c(1, 6)) {
   if (is.null(dimnames(landmark)[[3]]))
     stop("landmark array do not have names")
   if (!is.numeric(extract) & length(extract == 2))

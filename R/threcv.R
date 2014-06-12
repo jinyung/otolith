@@ -1,6 +1,6 @@
 #' Optimize threshold on posterior probability
 #' 
-#' @description to estimate the effect of setting a threshold 
+#' @description To estimate the effect of setting a threshold 
 #'  on posterior probability to reject "unsure" predictions.
 #' @details only \code{\link{lda}} is supported now. \code{lda} decide the class 
 #'  (e.g. species) based on the calculated posterior probability. 
@@ -14,7 +14,7 @@
 #'  the choice of threshold value is really arbitrary and depends on one's objectives.
 #' @param X matrix of PC scores from \code{\link{rGPA}} object (the \code{score} value)
 #' @param Y a factor giving the grouping, e.g. the \code{sp} value from 
-#'  \code{\link{routine1}} object
+#'  \code{\link{routine1}} object or obtain from \code{\link{getclass}}
 #' @param saveplot logical. The plot will be saved if \code{TRUE}, 
 #'  and no plot is displayed in the window. Note that outliers of
 #'   boxplot are not plotted.
@@ -32,10 +32,9 @@
 #' @references
 #' Beleites, C., & Salzer, R. (2008). Assessing and improving the stability of 
 #'  chemometric models in small sample size situations. 
-#'  Analytical and Bioanalytical Chemistry, 390(5), 1261-1271.
+#'  \emph{Analytical and Bioanalytical Chemistry}, 390(5), 1261-1271.
 
-threcv <- function(X, Y, saveplot=FALSE, plotsize=1000, run=30, k=5){
-  probar <- txtProgressBar(1, 10, style=3, char="|")  
+threcv <- function(X, Y, saveplot=FALSE, plotsize=1000, run=30, k=5) {
   accu <- numeric()
   accu.sd <- numeric()
   total <- numeric()
@@ -43,11 +42,12 @@ threcv <- function(X, Y, saveplot=FALSE, plotsize=1000, run=30, k=5){
   temp <- NULL
   result <- data.frame(matrix(NA, k * run * 10, 3))
   levellabel <- c(0.5, seq(0.6, 0.95, 0.05), 0.99)
-  threlevel <- gl(10, run * k, labels=levellabel, ordered=TRUE)#group level
+  threlevel <- gl(10, run * k, labels=levellabel, ordered=TRUE) # group level
   result[, 3] <- threlevel
-  cat("\n**Evaluating posterior probability threshold value:\n\n")  
   for (i in 1:10) {
-    temp <- mrkfcv(X=X, Y= Y, suppress=TRUE, k=k, run=run, 
+    cat ("\r                       (Evaluating threshold at: ", levellabel[i], 
+         ") | threcv progress: [", round(i / 10 * 100), "%]       ", sep="")
+    temp <- mrkfcv(X=X, Y= Y, suppress="text", k=k, run=run, 
             threshold=levellabel[i])
     result[((i - 1) * run * k + 1):(i * run * k), 1] <- 100 - temp$misclass
     result[((i - 1) * run * k + 1):(i * run * k), 2] <- temp$total.pred
@@ -55,9 +55,8 @@ threcv <- function(X, Y, saveplot=FALSE, plotsize=1000, run=30, k=5){
     accu.sd[i] <- temp$accu.sd
     total[i] <- temp$total 
     total.sd[i] <- temp$total.sd
-    setTxtProgressBar(probar, i)
+    #setTxtProgressBar(probar, i)
   }
-  cat("\n\n")
   if (saveplot == TRUE) {
     filename <- "threshold-optimization.tif"
     tiff(filename, plotsize, plotsize, res=172)
@@ -75,10 +74,11 @@ threcv <- function(X, Y, saveplot=FALSE, plotsize=1000, run=30, k=5){
   box()
   if (saveplot == TRUE) {
     dev.off()
-    cat("The plot is saved at:", 
-        paste(getwd(), filename, sep="/"), "\n\n")
+    cat("\n\nThe plot is saved at:", 
+        paste(getwd(), filename, sep="/"), "\n")
   }
   result <- data.frame(cbind(accu, accu.sd, total, total.sd))
   result$threshold <- levellabel
+  cat("\nEvaluation completed\n")
   return(result)
 }
