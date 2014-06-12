@@ -1,7 +1,10 @@
 #' Convert image to semi-landmarks
 #' 
 #' @description A wrapper function to convert image files to semi-landmarks
-#' @param opendir directory path. folder containing the images to be opened.
+#' @param path path(s) to directory (containing the images, accepts multiple 
+#'  directories) or image file(s) to be processed
+#' @param type type of input. select folder (\code{"dir"}; default) 
+#'  or select image files (\code{"files"})
 #' @param threshold numeric. argument passed to \code{\link{extractout}}
 #' @param resize logical. whether to resize the image when reading the image. 
 #'  argument passed to \code{\link{loadimg}}
@@ -17,7 +20,9 @@
 #' @param suppress logical. whether to supress the system messages on running status.
 #' @param plot \code{"no"} = no plot; \code{"overlay"} = plot of outline 
 #'  and semi-landmarks overlaid on image; \code{"plain"} = plot of plain outline
-#' @param start numeric. number of which the 
+#' @param start numeric. number of which the loop start, useful when 
+#'  \code{type = "dir"} with a lot of images to process 
+#'  and processing had to be restarted.
 #' @param extract argument passed to \code{\link{getclass}}
 #' @return 
 #'  if \code{saveoutline=TRUE} or \code{savelandmark=TRUE} or \code{plot != "no"}, 
@@ -30,42 +35,58 @@
 #' Which this function wraps: \code{\link{extractout}}, \code{\link{equaldist}}
 #' @export
 
-img2landmark <- function (opendir, threshold = 0.3, resize = TRUE, nd = 50, 
+img2landmark <- function (path, type = c("dir", "file"), 
+                          threshold = 0.3, resize = TRUE, nd = 50, 
                           saveoutline = TRUE, savelandmark = TRUE,  
                           plot = c("no", "overlay", "plain"), savedir,                           
-                          suppress=FALSE, start, extract = c(1, 6)) {
-  # package and arguments check
-  require(EBImage)
-  if (missing(opendir)) {
-    if (Sys.info()['sysname'] == "Windows")
-      opendir <- choose.dir(default = getwd(), 
-                 caption = "Select folder containing the images")
-    else
-      stop("you need to provide path to folder containing the images")
+                          suppress = FALSE, start, extract = c(1, 6)) {
+  type <- match.arg(type)
+  if (missing(path)) {
+    if (Sys.info()['sysname'] == "Windows") {
+      # if under windows, interactive selection window appears
+      switch(type, 
+             dir = assign("imglist", list.files(choose.dir(default = getwd(), 
+                   caption = "Select folder containing the images"), 
+                   full.names = TRUE)),
+             file = assign("imglist", choose.files(default = getwd(), 
+                    caption="Select images to be processed", 
+                    filters = c(".jpg/.png/.tif", "*.jpg; *.png; *.tif")))
+                    # filters set the file type that can be selected
+             )
+    } else {
+      switch(type, 
+             dir = stop("you need to provide path to folder containing the images"),
+             file = stop("you need to provide the images")
+             )
+    }    
+  } else {
+    switch(type, 
+           dir = assign("imglist", list.files(path)),
+           file = assign("imglist", path)
+           )
   }
   plot <- match.arg(plot)
   if (saveoutline | savelandmark | plot != "no") {
     if (missing(savedir)) {
-      if (Sys.info()['sysname'] == "Windows")
-        savedir <- choose.dir(default = opendir, 
+      if (Sys.info()['sysname'] == "Windows") {
+        savedir <- choose.dir(default = .getdir(imglist), 
+                              # get dir from full file name
                    caption = "Select folder to save the outlines")
-      else
+      } else
         stop("you need to provide path to folder to save the file(s)")
     }
   }
-  # get the file list and check
-  imglist <- list.files(opendir)
-  ext <- sapply(imglist, function(x) rev(unlist(strsplit(x, "[.]")))[1])
-    # split character at ".", take the last splitted part
-    # fixed bug for file name with "." in it and fixed bug for Thumb.db
-    # using sapply to avoid loop
+  # get the file extension and check
+  ext <- .ext(imglist)
   rmindex <- which(ext != "jpg" & ext != "tif" & ext!= "png")
     # remove the files belongs to format not supported
-  imglist <- imglist[-rmindex]
-  imgname <- sapply(imglist, function(x) substr(x, 1, nchar(x) - 4))
+    # fixed bug for Thumb.db
+  if (length(rmindex > 0))
+    imglist <- imglist[-rmindex]
+  imgname <- .getfilename(imglist) # get the filename, without ext
   # initialize 
-  outline <- vector("list", length(imglist))
-  names(outline) <- imglist
+  outline <- vector("list", length(imgname))
+  names(outline) <- imgname
   landmark <- array(data = NA, dim = c(nd * 2, 2, length(imgname)), 
               dimnames = list(NULL, NULL, imgname))
   # running thru the images
@@ -73,10 +94,10 @@ img2landmark <- function (opendir, threshold = 0.3, resize = TRUE, nd = 50,
     start <- 1
   each <- NULL
   begin <- NULL
-  for (i in start:length(imglist)) { 
+  for (i in start:length(imgname)) { 
     if (i == 1)
       begin <- proc.time()
-    img <- loadimg(paste(opendir, imglist[i], sep = "/"), resize = resize)
+    img <- loadimg(imglist[i], resize = resize)
     outline[[i]] <- extractout(img, threshold = threshold, plot = "no")
     landmark[, , i] <- equaldist(outline[[i]], nd = nd)
     # save files
@@ -112,11 +133,12 @@ img2landmark <- function (opendir, threshold = 0.3, resize = TRUE, nd = 50,
       # estimate remaining time
       if (i < 3) {
         remaining <- "estimating..." 
-        if (i == 1 & !suppress) {
-          cat("The input folder is selected as:", opendir, 
+        if (i == 1 & !suppress & type == "dir") {
+          cat("The input folder is selected as:", .getdir(imglist), 
               "\nThe saving options are:\n\t\tsaveoutline\t\t:", saveoutline, 
               "\n\t\tsavelandmark\t:", savelandmark, 
-              "\n\t\tplot\t\t\t\t\t\t\t\t\t:", plot, "\n\n")      
+              "\n\t\tplot\t\t\t\t\t\t\t\t\t:", plot, 
+              "\n\n")      
         }
       } else {
         each <- (proc.time() - begin)[3] / i
@@ -127,7 +149,7 @@ img2landmark <- function (opendir, threshold = 0.3, resize = TRUE, nd = 50,
                    # ref: http://stackoverflow.com/questions/11017933/format-time-span-to-show-hours-minutes-seconds
       }
       if (!suppress) {
-        cat ("\r**Processing: ", imglist[i], " (", i, "/", 
+        cat ("\r**Processing: ", imgname[i], " (", i, "/", 
                length(imglist), ") ",  "; Estimated remaining time = ", 
                remaining, "                                 ")
             # \r rewrite current line, blank ensure clean overwrite 

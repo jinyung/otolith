@@ -2,16 +2,24 @@
 \alias{otopred}
 \title{Predict new samples based on classification models}
 \usage{
-otopred(query, project, type = c("nef", "gpa", "des"), method = c("lda",
-  "tree", "plsda"), har = NULL, pc = NULL, threshold = NULL,
-  reland = TRUE, tol = 0.1, write = FALSE)
+otopred(project, query, type = c("nef", "gpa", "des"), method = c("lda",
+  "tree", "plsda"), har, pc, threshold, reland = TRUE, tol = 0.1,
+  mode = c("pred", "search+pred"), write = FALSE, ...)
 }
 \arguments{
-  \item{query}{dataframe of shape descriptor data or p x k
-  x n array of semi-landmarks}
+  \item{project}{path to a project (\code{.rds} file) to be
+  read, saved using \code{\link{saveproj}}, or a project
+  object already read into R.  if not given, interactive
+  file selector will pop out to prompt user to select a
+  \code{.rds} file (Windows only)}
 
-  \item{project}{the project data, see
-  \code{\link{saveproj}}}
+  \item{query}{path(s) to otolith images/ path(s) of folder
+  containing the otolith images/ code{.tps} file containing
+  the semi-landmark configurations/ p x k matrix or p x k x
+  n array of semi-landmark configuration(s) to be
+  predicted. If none is given, interactive file selector
+  will pop out to prompt user to select images to be
+  searched (Windows only)}
 
   \item{type}{type of data to predict.}
 
@@ -38,7 +46,15 @@ otopred(query, project, type = c("nef", "gpa", "des"), method = c("lda",
   re-arrangement of landmark configuration should be
   carried out.}
 
+  \item{mode}{when \code{="search+pred"}, searching is
+  included in addition to prediction using
+  \code{\link{otosearch}}. automatically changed to
+  \code{"search+pred"} when \code{reland=TRUE}}
+
   \item{write}{logical. whether to save the result.}
+
+  \item{...}{other arguments that can be paseed to
+  \code{\link{otosearch}}}
 }
 \value{
 matrix of prediction class and posterior probablity.

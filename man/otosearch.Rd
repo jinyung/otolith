@@ -2,27 +2,40 @@
 \alias{otosearch}
 \title{Search new specimens' configuration against project database}
 \usage{
-otosearch(query, project, show = 5, save = FALSE, name = NULL)
+otosearch(project, query, show = 5, saveresult = FALSE, name)
 }
 \arguments{
-  \item{query}{p x k matrix or p x k x n array. the query
-  configuration(s)}
+  \item{project}{path to a project (\code{.rds} file) to be
+  read, saved using \code{\link{saveproj}}, or a project
+  object already read into R.  if not given, interactive
+  file selector will pop out to prompt user to select a
+  \code{.rds} file (Windows only)}
 
-  \item{project}{a project saved using
-  \code{\link{saveproj}}. query is searched against the
-  whole array of configurations saved within the project.}
+  \item{query}{path(s) to otolith images/ path(s) of folder
+  containing the otolith images/ code{.tps} file containing
+  the semi-landmark configurations/ p x k matrix or p x k x
+  n array of semi-landmark configuration(s) to be searched.
+  If none is given, interactive file selector will pop out
+  to prompt user to select images to be searched (Windows
+  only)}
 
   \item{show}{numeric. how many search results to be shown
   (in order of ranking).}
 
-  \item{save}{logical. whether to save the result.}
+  \item{saveresult}{logical. whether to save the result.}
 
   \item{name}{character. optional. the file name, if
-  \code{save=TRUE}.}
+  \code{saveresult=TRUE}.}
 }
 \value{
-The search result. if \code{save=TRUE}, the result is
-written into a \code{.txt} file
+The search result. if \code{saveresult=TRUE}, the result is
+written into a \code{.txt} file. The results include:
+\itemize{ \item \code{rdist}: distance between the query
+and the match \item \code{label}: label of the match from
+the database \item \code{species}: species of the match
+\item \code{inside}: whether the \code{rdist} is within the
+range of that species in the database \item \code{orient}:
+type of configuration that match }
 }
 \description{
 search the semi-landmarks configuration(s) of new, unknown
@@ -54,7 +67,5 @@ doesn't need to know the side/ direction of the query.
 }
 \seealso{
 Similar: \code{\link{otopred}}
-
-Which this function wraps: \code{\link{otosearch3}}
 }
 

@@ -2,13 +2,18 @@
 \alias{img2landmark}
 \title{Convert image to semi-landmarks}
 \usage{
-img2landmark(opendir, threshold = 0.3, resize = TRUE, nd = 50,
-  saveoutline = TRUE, savelandmark = TRUE, plot = c("no", "overlay",
-  "plain"), savedir, suppress = FALSE, start, extract = c(1, 6))
+img2landmark(path, type = c("dir", "file"), threshold = 0.3,
+  resize = TRUE, nd = 50, saveoutline = TRUE, savelandmark = TRUE,
+  plot = c("no", "overlay", "plain"), savedir, suppress = FALSE, start,
+  extract = c(1, 6))
 }
 \arguments{
-  \item{opendir}{directory path. folder containing the
-  images to be opened.}
+  \item{path}{path(s) to directory (containing the images,
+  accepts multiple directories) or image file(s) to be
+  processed}
+
+  \item{type}{type of input. select folder (\code{"dir"};
+  default) or select image files (\code{"files"})}
 
   \item{threshold}{numeric. argument passed to
   \code{\link{extractout}}}
@@ -41,7 +46,9 @@ img2landmark(opendir, threshold = 0.3, resize = TRUE, nd = 50,
   plot of outline and semi-landmarks overlaid on image;
   \code{"plain"} = plot of plain outline}
 
-  \item{start}{numeric. number of which the}
+  \item{start}{numeric. number of which the loop start,
+  useful when \code{type = "dir"} with a lot of images to
+  process and processing had to be restarted.}
 
   \item{extract}{argument passed to \code{\link{getclass}}}
 }

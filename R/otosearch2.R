@@ -1,4 +1,4 @@
-#' [Otosearch - internal function] 
+#' Otosearch - internal 
 #' 
 #' @description search one specimen against whole database 
 #' @param specimen matrix of configuration of query 
@@ -7,10 +7,12 @@
 #' @param show how many search results to be shown (in order of ranking)
 #' @return search result
 #' @importFrom Morpho rotonto kendalldist
+#' @export
 #' @seealso 
 #'  Functions that wraps this function: \code{\link{otosearch3}}
 #'  
 #'  Which this function wraps: \code{\link{rotonto}}, \code{\link{kendalldist}}
+#' @keywords internal
 
 otosearch2 <- function(specimen, database, species=NULL, show=5) {
   require(Morpho)

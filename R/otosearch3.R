@@ -1,4 +1,4 @@
-#' [Otosearch - internal function] 
+#' Otosearch - internal function
 #' 
 #' @description search one specimen against whole database, with exhaustive 
 #'  search using all possible semi-landmarks configuration arrangements
@@ -11,6 +11,8 @@
 #'  Functions that wraps this function: \code{\link{otosearch}}
 #'  
 #'  Which this function wraps: \code{\link{otosearch2}}, \code{\link{reland}}
+#' @keywords internal
+#' @export
 
 otosearch3 <- function(specimen, project, show=5) {
   require(Morpho)
@@ -36,7 +38,7 @@ otosearch3 <- function(specimen, project, show=5) {
     index <- which(ms.rdist < distmax)
     result <- NULL 
     for (i in 1:length(index)) {
-      if (index[i]<=mslevel) {
+      if (index[i] <= mslevel) {
         # first the original configuration
         clevel <- levels(project$class)[index[i]]
         Aindex <- which(project$class == clevel)
