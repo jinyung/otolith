@@ -1,10 +1,6 @@
-OtolithR
+Otolith
 =======
 
-Identification of fish otolith using digital images
+R package for identification of fish otolith using digital images
 
-Wong Jin Yung
-
-University of Malaya
-
-wongjinyung[at]gmail.com
+Please refer to the [Wiki pages](https://bitbucket.org/jinyung/otolith/wiki/Home) for details of the project
