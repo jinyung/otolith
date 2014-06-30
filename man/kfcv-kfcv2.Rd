@@ -7,6 +7,7 @@
 }
 \usage{
 kfcv(X, Y, method = c("lda", "plsda", "tree"), k = 5, threshold, ncomp)
+
 kfcv2(X, Y, method = c("lda", "plsda", "tree"), k = 5, threshold, ncomp)
 }
 \arguments{
@@ -40,24 +41,30 @@ kfcv2(X, Y, method = c("lda", "plsda", "tree"), k = 5, threshold, ncomp)
   number of prediction after excluding the ones lower than
   threshold, if \code{threshold} value is given}
   
+  \item{ind.prediction}{[\code{kfcv} only]} logical. prediction result on each 
+  specimen (every specimen will be used once in validation set in kfcv), 
+  with \code{TRUE} = correctly predicted, \code{FALSE} = wrongly predicted
+  
   \item{stat}{[\code{kfcv2} only] \code{k} number of matrix containing the
   calculated precision, sensitivity(recall) and specificity
   for each class, for each fold. May contain \code{NA}
-  values if the class is not present in the fold.}
+  values if the class is not present in the fold}
   
   \item{conmat}{[\code{kfcv2} only] \code{k} number of confusion matrices, shown
   as proportion rather than counts. Proportion = number
   correctly or incorrectly predicted divided by the total
-  number of that class in training set.} 
+  number of that class in training set} 
 }
 \details{
-
-  \code{kfcv2} is an improved version of \code{kfcv} function, 
-  with the ability to calculate the by-class statistics 
+  
+  Both version computes k-fold cross validation, 
+  however there are some differences in features:
+  
+  \code{kfcv} gives the result of prediction on each specimen. 
+  
+  \code{kfcv2} comes with the ability to calculate the by-class statistics 
   (recall, precision and specificity). It also calculate confusion matrices for 
-  each folds. Because of the extra calculations, the 
-  execution takes a little bit more time, and hence user might prefer \code{kfcv} 
-  in certain circumstances when speed is a concern.
+  each folds. 
 
   What the stat values mean:
   \itemize{ 

@@ -40,6 +40,7 @@ kfcv <- function(X, Y, method=c("lda", "plsda", "tree"),
   dat$class <- Y
   misclass <- numeric()
   total.pred <- NULL
+  ind.prediction <- logical(length(Y)) # new addition of by subject success
   for (i in 1:k) {
     testingindices <- alltestingindices[[i]]
     train <- dat[-testingindices, ]
@@ -77,6 +78,7 @@ kfcv <- function(X, Y, method=c("lda", "plsda", "tree"),
     }
     t.i <- table(prediction.i, test$class)
     t.i <- as.data.frame.matrix(t.i)
+    ind.prediction[testingindices] <- prediction.i == test$class
     wrongsum.i <- 0
     for (j in 1:testlength) {
       wrongsum.i <- wrongsum.i +  
@@ -87,5 +89,5 @@ kfcv <- function(X, Y, method=c("lda", "plsda", "tree"),
     if (!missing(threshold))
       total.pred[i] <- total.pred.i      
   }
-  return(list(misclass=misclass, total=total.pred))
+  return(list(misclass=misclass, total=total.pred, ind.prediction = ind.prediction))
 }

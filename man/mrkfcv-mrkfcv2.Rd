@@ -54,6 +54,8 @@ mrkfcv2(X, Y, method = c("lda", "tree", "plsda"), k = 5, run = 100,
     \code{threshold} value is not given}
   \item{misclass}{[\code{mrkfcv} only] vector of \code{run x k} number of
     misclassification rate} 
+  \item{ind.prediction}{[\code{mrkfcv} only] vector of precentage of correctly 
+  predicted specimens}
   \item{stat.sum}{[\code{mrkfcv2} only] cross-validated by-class precision, recall
     and specificity} 
   \item{conmat}{[\code{mrkfcv2} only] confusion matrix shown in
@@ -70,6 +72,10 @@ mrkfcv2(X, Y, method = c("lda", "tree", "plsda"), k = 5, run = 100,
   \code{mrkfcv} is a wrapper for \code{kfcv} while
   \code{mrkfcv2} is a wrapper for \code{kfcv2}, both of which iterate them for 
   a number of times specified by \code{run} argument. 
+  
+  For \code{mrkfcv}, the \code{ind.prediction} value is the precentage calculated
+  from \code{run} number of results. This calculation is useful when user wish to 
+  find out problematic specimen(s) during building classification model.
   
   For \code{mrkfcv2}, the calculated by-class statistics (\code{stat.sum}) are
   average of all values of number of \code{k x run} of

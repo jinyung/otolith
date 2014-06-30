@@ -41,6 +41,7 @@ mrkfcv <- function (X, Y, method=c("lda", "tree", "plsda"), k=5, run=100,
   method <- match.arg(method)
   suppress <- match.arg(suppress)
   misclass <- numeric()
+  predict.all <- matrix(data = FALSE, dim(X)[1], run)
   if (!missing(threshold))
     total.pred <- NULL
   if (suppress == FALSE) {
@@ -50,22 +51,29 @@ mrkfcv <- function (X, Y, method=c("lda", "tree", "plsda"), k=5, run=100,
   for (p in 1:run) {
     run.p <- kfcv(X=X, Y=Y, method=method, k=k, threshold=threshold, ncomp=ncomp)
     misclass[(p * k - (k - 1)):(p * k)] <- run.p$misclass
+    predict.all[, p] <- run.p$ind.prediction
     if (!missing(threshold))
       total.pred[(p * k - (k - 1)):(p * k)] <- run.p$total
     if (suppress == FALSE)
       setTxtProgressBar(pb, p)
-    else if (suppress == "text")
+    else if (suppress == "text") {
       cat("\rmrkfcv progress: [", round(p / run * 100), "%]", sep="")
+      flush.console() # not required in RStudio but in simple R console, yes
+    }
   }
+  ind.recall <- apply(predict.all, 1, sum, na.rm = TRUE) / run * 100 
+  names(ind.recall) <- rownames(X)
   accuracy <- round(100 - mean(misclass), 2)
   accu.sd <- round(sd(misclass), 2)
   if (!missing(threshold)) {
     total <- round(mean(total.pred), 2)
     total.sd <- round(sd(total.pred), 2)
-    return.list <- list(accuracy=accuracy, accu.sd=accu.sd, total=total, total.sd=total.sd, 
-                   misclass=misclass, total.pred=total.pred)
+    return.list <- list(accuracy=accuracy, accu.sd=accu.sd, total=total, 
+                   total.sd=total.sd, misclass=misclass, total.pred=total.pred, 
+                   ind.recall = ind.recall)
   } else {
-    return.list <- list(accuracy=accuracy, accu.sd=accu.sd, misclass=misclass)
+    return.list <- list(accuracy=accuracy, accu.sd=accu.sd, misclass=misclass, 
+                        ind.recall = ind.recall)
   }
   if (suppress == FALSE)
     cat("\n\n")
