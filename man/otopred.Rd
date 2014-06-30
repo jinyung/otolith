@@ -3,13 +3,14 @@
 \title{Predict new samples based on classification models}
 \usage{
 otopred(project, query, type = c("nef", "gpa", "des"), method = c("lda",
-  "tree", "plsda"), har, pc, threshold, reland = TRUE, tol = 0.1,
-  mode = c("pred", "search+pred"), write = FALSE, ...)
+  "agglda", "tree", "plsda"), har, pc, threshold, reland = TRUE, tol = 0.2,
+  fix = NULL, mode = c("pred", "search+pred"), write = FALSE,
+  search.plot = FALSE, ...)
 }
 \arguments{
   \item{project}{path to a project (\code{.rds} file) to be
   read, saved using \code{\link{saveproj}}, or a project
-  object already read into R.  if not given, interactive
+  object already read into R. if not given, interactive
   file selector will pop out to prompt user to select a
   \code{.rds} file (Windows only)}
 
@@ -46,15 +47,23 @@ otopred(project, query, type = c("nef", "gpa", "des"), method = c("lda",
   re-arrangement of landmark configuration should be
   carried out.}
 
+  \item{fix}{numeric. index of landmarks that should stay
+  fixed. default is \code{NULL}, i.e. all semi-landmarks
+  are slid.}
+
   \item{mode}{when \code{="search+pred"}, searching is
   included in addition to prediction using
   \code{\link{otosearch}}. automatically changed to
   \code{"search+pred"} when \code{reland=TRUE}}
 
-  \item{write}{logical. whether to save the result.}
+  \item{write}{logical. whether to save the result}
 
-  \item{...}{other arguments that can be passed to
-  \code{\link{otosearch}}}
+  \item{search.plot}{logical. whether to plot the search
+  results. used only when \code{reland = TRUE} or
+  \code{mode = "search+pred"}}
+
+  \item{...}{other arguments passed to
+  \code{\link{agglda}}}
 }
 \value{
 matrix of prediction class and posterior probablity.
@@ -75,8 +84,8 @@ known, and is already in the same arrangements as the
 dataset in project.
 }
 \note{
-Currently the \code{method} supported is limited to
-\code{"lda"} only.
+Currently the \code{method} supported are limited to
+\code{"lda"} and \code{\link{agglda}} only.
 }
 \seealso{
 Which this function wraps: \code{\link{otosearch}}
