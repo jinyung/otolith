@@ -10,6 +10,7 @@
 #' @importFrom EBImage bwlabel computeFeatures.shape rmObjects ocontour getNumberOfFrames
 #' @seealso
 #' Which this function wraps: \code{\link[EBImage]{ocontour}}
+#' 
 #' Function that wraps this function: \code{\link{img2landmark}}
 #' @export
 

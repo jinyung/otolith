@@ -22,34 +22,34 @@ otopred(project, query, type = c("nef", "gpa", "des"), method = c("lda",
   will pop out to prompt user to select images to be
   searched (Windows only)}
 
-  \item{type}{type of data to predict.}
+  \item{type}{type of data to predict}
 
-  \item{method}{classification method. see note.}
+  \item{method}{classification method. see Note}
 
   \item{har}{numeric. optional. By default \code{har} range
   saved in the project is used. a different value could be
-  set using this argument.}
+  set using this argument}
 
   \item{pc}{numeric. optional. By default \code{pc} range
   saved in the project is used. a different value could be
-  set using this argument.}
+  set using this argument}
 
   \item{threshold}{numeric. optional. threshold value on
   posterior probalility to reject the prediction. see
   \code{\link{threcv}}. Currently works with \code{lda}
-  only.}
+  only}
 
   \item{reland}{logical. whether to do automatic
-  re-arrangement of landmark- configuration.}
+  re-arrangement of landmark- configuration}
 
   \item{tol}{numeric. max limit of distance (see
   \code{\link{sprdist}}) to which the automatic
   re-arrangement of landmark configuration should be
-  carried out.}
+  carried out}
 
-  \item{fix}{numeric. index of landmarks that should stay
-  fixed. default is \code{NULL}, i.e. all semi-landmarks
-  are slid.}
+  \item{fix}{numeric. for \code{gpa} method. index of
+  landmarks that should stay fixed. default is \code{NULL},
+  i.e. all semi-landmarks are slid. see Note}
 
   \item{mode}{when \code{="search+pred"}, searching is
   included in addition to prediction using
@@ -74,7 +74,7 @@ or semi-landmark configurations.
 }
 \details{
 The functions include the \code{\link{otosearch}} algorithm
-as a mean to guess the semi-landmarks arragement (the four
+as a means to guess the semi-landmarks arragement (the four
 types of arrangements, see \code{\link{reland}}), so that
 the user can predict the new, unknown samples even if the
 side and the direction of the otoliths are unknown. This
@@ -86,11 +86,19 @@ dataset in project.
 \note{
 Currently the \code{method} supported are limited to
 \code{"lda"} and \code{\link{agglda}} only.
+
+Because sliding semi-landmark method is not supported by
+\code{\link{otosearch}}, thus the \code{project} used
+should contain \code{gpa} object from non-sliding GPA
+transformation. Sliding will be performed by \code{otopred}
+instead if \code{gpa} is the preferred method and \code{fix
+= NULL}.
 }
 \seealso{
 Which this function wraps: \code{\link{otosearch}}
 
 Methods of classifier: \code{\link{lda}},
-\code{\link{plsda}}, \code{\link{tree}}
+\code{\link{plsda}}, \code{\link{tree}},
+\code{\link{agglda}}
 }
 

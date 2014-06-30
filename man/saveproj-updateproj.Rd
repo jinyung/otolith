@@ -53,5 +53,6 @@ with new ones, the rest will remain the same. The current version only support o
 }
 \seealso{
 To read the project, use: \code{\link{readRDS}}
+
 Which this function wraps: \code{\link{saveRDS}}
 }

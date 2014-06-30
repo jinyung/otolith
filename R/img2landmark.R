@@ -137,7 +137,7 @@ img2landmark <- function (path, type = c("dir", "file"),
           cat("The input folder is selected as:", .getdir(imglist), 
               "\nThe saving options are:\n   saveoutline  :", saveoutline, 
               "\n   savelandmark :", savelandmark, 
-              "   plot         :", plot, 
+              "\n   plot         :", plot, 
               "\n\n")      
         }
       } else {

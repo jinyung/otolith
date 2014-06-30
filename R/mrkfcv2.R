@@ -29,6 +29,7 @@
 
 mrkfcv2 <- function(X, Y, method=c("lda", "tree", "plsda"), k=5, run=100, 
                     threshold, ncomp, suppress=FALSE) {
+  method <- match.arg(method)
   misclass <- numeric()
   total.pred <- NULL
   class.level <- levels(Y)
@@ -55,17 +56,17 @@ mrkfcv2 <- function(X, Y, method=c("lda", "tree", "plsda"), k=5, run=100,
     if (!suppress)
       setTxtProgressBar(pb, p)
   }
-  stat.sum <- round(apply(stat.array, c(1, 2), mean, na.rm=T), 2)
-  stat.sum.sd <- round(apply(stat.array, c(1, 2), sd, na.rm=T), 2)
+  stat.sum <- round(apply(stat.array, c(1, 2), mean, na.rm=TRUE), 2)
+  stat.sum.sd <- round(apply(stat.array, c(1, 2), sd, na.rm=TRUE), 2)
   conmatF <- ConMat[, , 1]
-  conmatF <- round(apply(ConMat, c(1, 2), mean, na.rm=T), 2)
+  conmatF <- round(apply(ConMat, c(1, 2), mean, na.rm=TRUE), 2)
   accuracy <- round(100 - mean(misclass), 2)
   accu.sd <- round(sd(misclass), 2)
   if (!missing(threshold)) {
     total <- round(mean(total.pred), 2)
     total.sd <- round(sd(total.pred), 2)
     return.list <- list(accuracy=accuracy, accu.sd=accu.sd, stat.sum=stat.sum, 
-                        conmat=conmatF, total=total.pred, total.sd=total.sd)
+                        conmat=conmatF, total=total, total.sd=total.sd)
   } else {
     return.list <- list(accuracy=accuracy, accu.sd=accu.sd, stat.sum=stat.sum, 
                         conmat=conmatF)

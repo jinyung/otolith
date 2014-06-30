@@ -2,19 +2,23 @@
 \alias{rNEF}
 \title{Normalized elliptical Fourier analysis routine}
 \usage{
-rNEF(A, plotpca = FALSE, class)
+rNEF(A, plotpca = FALSE, class, ...)
 }
 \arguments{
   \item{A}{p x k x n array of raw semilandmarks
   configurations}
 
   \item{plotpca}{logical. Whether to plot the PCA for quick
-  preliminary view.  Plot first 3 PCs.}
+  preliminary view.  Plot first 3 PCs}
 
   \item{class}{factor giving the species/grouping, used for
-  plotting purpose, e.g. using sp value from
-  \code{\link{routine1}}.  Used only when
+  plotting purpose, e.g. using \code{sp} value from
+  \code{\link{routine1}} or using the
+  \code{\link{getclass}} function. Used only when
   \code{plotpca=TRUE}}
+
+  \item{...}{other arguments passed to
+  \code{\link{plotpca}}}
 }
 \value{
 \item{coeff}{matrix of all harmonic coefficients}

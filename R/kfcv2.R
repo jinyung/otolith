@@ -67,8 +67,8 @@ kfcv2 <- function(X, Y, method=c("lda", "plsda", "tree"),
     testlength<- length(levels(test$class))
     trainlength<- length(levels(train$class))
     # build classification sub-models with selected method
-    if (method == "lda"){
-      require(MASS);
+    if (method == "lda") {
+      require(MASS)
       mod.i <- lda(class ~ predictor, data=train, prior=
                      rep(1/trainlength, trainlength))
       prediction.temp <- predict(mod.i, test)
@@ -102,7 +102,7 @@ kfcv2 <- function(X, Y, method=c("lda", "plsda", "tree"),
     t.i <- as.data.frame.matrix(t.i)
     wrongsum.i <- 0
     for (j in 1:testlength) {
-      wrongsum.i <- wrongsum.i+ sum(t.i[rownames(t.i) != colnames(t.i)[j], 
+      wrongsum.i <- wrongsum.i + sum(t.i[rownames(t.i) != colnames(t.i)[j], 
                     colnames(t.i)[j]])
     }
     misclass.rate.i <- wrongsum.i / length(alltestingindices[[i]]) * 100
@@ -115,10 +115,10 @@ kfcv2 <- function(X, Y, method=c("lda", "plsda", "tree"),
       tempstat.i[m, 1] <- t.i[m, m] / (sum(t.i[, m])) # recall
       if (sum(t.i[m, ]) > 0)
         tempstat.i[m, 2] <- t.i[m, m] / (sum(t.i[m,])) # precision
-      tempstat.i[m, 3] <- sum(t.i[-m, -m])/ (sum(t.i[-m, -m]) + 
+      tempstat.i[m, 3] <- sum(t.i[-m, -m]) / (sum(t.i[-m, -m]) + 
                          sum(t.i[m, ])-t.i[m, m] ) # specificity
       for (r in 1:class.length)
-        tempcon[r, m] <- t.i[r, m]/sum(t.i[, m])   
+        tempcon[r, m] <- t.i[r, m] / sum(t.i[, m])   
     }
     # remove the stat row /cm column with missing class level in training/
     # test sets

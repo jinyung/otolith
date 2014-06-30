@@ -16,7 +16,8 @@ rGPA(A, fix = NULL, plotpca = FALSE, class)
   preliminary assessment of the data}
 
   \item{class}{factor giving the species/grouping, used for
-  plotting purpose, e.g. using sp value from
+  plotting purpose and calculation of within class range of
+  Procrustes distance, e.g. using sp value from
   \code{\link{routine1}} or using \code{\link{getclass}}}
 }
 \value{

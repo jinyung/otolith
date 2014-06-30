@@ -4,7 +4,8 @@
 #'  multiple-run k-fold cross validation. Different number of PCs are used 
 #'  in training the classification model and the result (misclassification rate) 
 #'  is plotted out.
-#' @param X matrix of PC scores from \code{\link{rGPA}} object (the \code{score} value)
+#' @param X matrix of PC scores from \code{\link{rGPA}} object (the \code{score}
+#'   value)
 #' @param Y a factor giving the grouping, e.g. the \code{sp} value from 
 #'  \code{\link{routine1}} object
 #' @param pc numeric. number of PCs to be tested.
@@ -33,8 +34,8 @@ pccv <- function(X, Y, pc, saveplot=FALSE, plotsize=1000,
   misclass[, 2] <- factor(rep(paste0("PC", 1:pc), each=run * k), 
                           levels= paste0("PC", 1:pc), ordered=TRUE, labels=1:pc)
   for (i in 1:pc) {
-    cat ("\r                       (Evaluating PC: 1 - ", i,") | pccv progress: [",  
-         round(i / pc * 100), "%]       ", sep="")
+    cat ("\r                       (Evaluating PC: 1 - ", i,
+         ") | pccv progress: [",  round(i / pc * 100), "%]       ", sep="")
     flush.console()
     temp <- mrkfcv(X=data.frame(selectdim(X, pc= i)), Y= Y, suppress="text", 
                    method=method, k=k, run=run) 
@@ -44,14 +45,15 @@ pccv <- function(X, Y, pc, saveplot=FALSE, plotsize=1000,
     error[i] <- 100 - temp$accuracy
     errorsd[i] <- temp$accu.sd
   }
-  if (saveplot == TRUE) {
-    filename <- "pc-optimization.tif"
+  if (saveplot) {
+    filename <- paste0(deparse(substitute(X)), "-pc-optimization(", 
+                       Sys.Date(), ").tif")
     tiff(filename, plotsize, plotsize, res = 172, compression = "lzw")
   }  
   boxplot(misclass[, 1] ~ misclass[, 2], outline=FALSE, 
           ylab="Cross-validated misclassification rate", 
           xlab="No. of PC used in training")
-  if (saveplot == TRUE) {
+  if (saveplot) {
     dev.off()
     cat("\nThe plot is saved at:", 
         paste(getwd(), filename, sep="/"), "\n")

@@ -18,10 +18,11 @@
 #'  \code{\link{routine1}}
 #' @keywords internal  
 
-plotpca <- function (pca, size=NULL, sizeamp=3, class, saveplot=FALSE, plotsize=1000) {
+plotpca <- function (pca, size = NULL, sizeamp = 3, class, saveplot = FALSE, 
+                     plotsize = 1000) {
   if (length(levels(class)) > 12)
     stop("now this function supports up to 12 groups only")
-  range01 <- function(x){((x-min(x))/(max(x)-min(x)))}
+  range01 <- function(x){((x - min(x))/(max(x) - min(x)))}
   if (!is.null(size)) { 
     radius <- sqrt((size) / pi)
     radius <- range01(radius) * sizeamp
@@ -30,31 +31,31 @@ plotpca <- function (pca, size=NULL, sizeamp=3, class, saveplot=FALSE, plotsize=
   }
   bg <- rainbow(length(levels(class)))[as.numeric(class)]
   if (saveplot == FALSE) {
-    dev.new(width=10,  height=10)
+    dev.new(width=10, height=10)
   } else {
-    filename <- paste0(bquote(pca), "-pca.tif")
-    tiff(filename, plotsize, plotsize, res=172)
+    filename <- paste0(deparse(substitute(pca)), "-pca(", Sys.Date(), ").tif")
+    tiff(filename, plotsize, plotsize, res=172, compression = "lzw")
   }
   par (mfrow=c(2, 2), mar=c(4, 4, 1, 1))
-  plot(pca$x[, c(1, 2)], asp=1,  cex= radius, pch=21, bg=bg, 
-       xlab= paste("PC1", "(", round(summary(pca)$
-       importance[, 1][2] * 100), "%)"), ylab= paste("PC2", 
+  plot(pca$x[, c(1, 2)], asp=1,  cex = radius, pch=21, bg=bg, 
+       xlab = paste("PC1", "(", round(summary(pca)$
+       importance[, 1][2] * 100), "%)"), ylab = paste("PC2", 
        "(", round(summary(pca)$importance[, 2][2] * 100), "%)"))
-  abline(v=0, h=0,  col="gray", lty=2)
-  plot(pca$x[, c(1, 3)], asp=1, cex= radius,  pch=21, bg=bg, 
-       xlab=paste("PC1", "(", round(summary(pca)$importance[, 1][2] * 100),
-       "%)"), ylab=paste("PC3", "(", round(summary(pca)$
+  abline(v = 0, h = 0, col = "gray", lty = 2)
+  plot(pca$x[, c(1, 3)], asp =1, cex = radius, pch = 21, bg = bg, 
+       xlab = paste("PC1", "(", round(summary(pca)$importance[, 1][2] * 100),
+       "%)"), ylab = paste("PC3", "(", round(summary(pca)$
        importance[, 3][2] * 100), "%)"))
-  abline(v=0, h=0, col="gray", lty=2)
-  plot(pca$x[, c(2, 3)],  asp=1,  cex= radius,  pch=21, bg=bg, 
-       xlab=paste("PC2", "(", round(summary(pca)$importance[, 2][2] * 100), 
-       "%)"), ylab=paste("PC3", "(", round(summary(pca)$
+  abline(v = 0, h = 0, col= "gray", lty = 2)
+  plot(pca$x[, c(2, 3)], asp = 1, cex = radius, pch = 21, bg = bg, 
+       xlab = paste("PC2", "(", round(summary(pca)$importance[, 2][2] * 100), 
+       "%)"), ylab = paste("PC3", "(", round(summary(pca)$
        importance[, 3][2] * 100), "%)"))
-  abline(v=0, h=0, col="gray", lty=2)
-  plot(1, 1, type='n',  axes=FALSE,  frame=FALSE,  ann=FALSE)
-  legend("center", fill=1:length(levels(as.factor(class))),  
-         title="Species", legend= levels(as.factor(class)))
-  if (saveplot == TRUE) {
+  abline(v = 0, h = 0, col = "gray", lty = 2)
+  plot(1, 1, type = 'n', axes = FALSE, frame = FALSE, ann = FALSE)
+  legend("center", fill = rainbow(length(levels(class))),  
+         title = "Species", legend = levels(as.factor(class)))
+  if (saveplot) {
     dev.off()
     cat("The plot is saved at:",  
         paste(getwd(), filename, sep="/"), "\n\n")

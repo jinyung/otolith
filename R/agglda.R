@@ -125,7 +125,7 @@ agglda <- function (X, Y, newdata = NULL, type = c("vote", "post"),
   if (!missing(threshold)) {
     prediction.class[prediction.percent < threshold] <- NA
     pred.length <- length(prediction.class[!is.na(prediction.class)])
-    total.pred <- pred.length / dim(X)[1] * 100
+    total.pred <- round(pred.length / dim(X)[1] * 100, 2)
   } else {
     total.pred <- NULL
     pred.length <- dim(X)[1]
@@ -139,13 +139,13 @@ agglda <- function (X, Y, newdata = NULL, type = c("vote", "post"),
     # confusion matrix and stats
     cm <- as.matrix(as.data.frame.matrix(table(prediction.class, Y)))
     TP <- diag(cm)
-    TN <- sapply(c(1:class.length), function(x) sum(cm[ -x, -x]))
-    FP <- rowSums(cm) - TP
-    FN <- colSums(cm) - TP
+    TN <- sapply(c(1:class.length), function(x) sum(cm[ -x, -x], na.rm = TRUE))
+    FP <- rowSums(cm, na.rm = TRUE) - TP
+    FN <- colSums(cm, na.rm = TRUE) - TP
     recall <- TP / (TP + FN) # recall
     precision <- TP / (TP + FP) # precision
     specificity <- TN / (TN + FP) # specificity
-    prevalence <- colSums(cm) / sum(cm)
+    prevalence <- colSums(cm) / sum(cm, na.rm = TRUE)
     PosPredVal <- (recall * prevalence) / ((recall * prevalence) + 
                     ((1 - specificity) * (1 - prevalence)))
     NegPredVal <- (specificity * (1 - prevalence)) / 
@@ -157,7 +157,7 @@ agglda <- function (X, Y, newdata = NULL, type = c("vote", "post"),
     switch(type, vote = {result$vote.percent <- round(prediction.percent, 3)},
            post = {result$mean.posterior <- round(prediction.percent, 3)
                    result$sd.posterior <- round(posterior.sd, 3)})
-    result <- list(accuracy=accuracy, conmat = cm, stat = stat, 
+    result <- list(accuracy = round(accuracy, 2), conmat = cm, stat = stat, 
                    total = total.pred, ind.prediction = result)
   } else {
     result <- data.frame(predict = prediction.class)

@@ -16,7 +16,7 @@ runmacro(imagejdir, opendir, savedir, threshold = 30)
 
   \item{threshold}{numeric. threshold value to be passed to
   ImageJ. range within 0-255, which is different from the
-  \code{link{img2landmark}} that use a 0-1 range.}
+  \code{\link{img2landmark}} that use a 0-1 range.}
 }
 \value{
 For each image, a file named \code{<image

@@ -23,6 +23,7 @@ Extract outline from a fish otolith image
 }
 \seealso{
 Which this function wraps: \code{\link[EBImage]{ocontour}}
+
 Function that wraps this function:
 \code{\link{img2landmark}}
 }

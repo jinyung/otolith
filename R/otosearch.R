@@ -179,7 +179,7 @@ otosearch <- function(project, query, show = 5, saveresult = FALSE,
         }
         plot(query.plot, asp = 1, type = "n", axes = FALSE)
         polygon(query.plot, border = "blue")
-        text(sum(par()$usr[1:2] * 0.5), sum(par()$usr[3:4] * 0.5),
+        text(mean(query.plot[, 1]), mean(query.plot[, 2]), 
                c(paste0("Query #", i)), bty = "n")
         # insert the index into result too
         result[[i]]$index.in.db <- NA 
@@ -198,8 +198,8 @@ otosearch <- function(project, query, show = 5, saveresult = FALSE,
                  matchlab <- "diff direction + side"}) 
           plot(match, asp = 1, type = "n", axes = FALSE)
           polygon(match)
-          text(sum(par()$usr[1:2] * 0.5), sum(par()$usr[3:4] * 0.5), 
-                 paste0(paste0("Match #", j), "\n", result[[i]]$label[j], 
+          text(mean(match[,1]), mean(match[,2]), 
+               paste0(paste0("Match #", j), "\n", result[[i]]$label[j], 
                         paste0("\nSp:", result[[i]]$species[j]), 
                         paste0("\n[", matchlab, "]")), 
                  bty = "n")

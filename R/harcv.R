@@ -34,8 +34,8 @@ harcv <- function(X, Y, har, saveplot=FALSE, plotsize=1000,
   misclass[, 2] <- factor(rep(paste0("har", 2:har), each=run * k), 
                    levels= paste0("har", 2:har), ordered=TRUE, labels=2:har)
   for (i in 2:har) {
-    cat ("\r                       (Evaluating har: 1 - ", i,") | harcv progress: [",  
-         round(i / har * 100), "%]       ", sep="")
+    cat ("\r                       (Evaluating har: 1 - ", i, 
+         ") | harcv progress: [", round(i / har * 100), "%]       ", sep="")
     flush.console()
     temp <- mrkfcv(X= selectdim(X, har= i), Y=Y, suppress="text", 
                    method=method, k=k, run=run)
@@ -43,14 +43,15 @@ harcv <- function(X, Y, har, saveplot=FALSE, plotsize=1000,
     error[i-1] <- 100 - temp$accuracy
     errorsd[i-1] <- temp$accu.sd
   }
-  if (saveplot == TRUE) {
-    filename <- "harmonics-optimization.tif"
+  if (saveplot) {
+    filename <- paste0(deparse(substitute(X)), "-har-optimization(", 
+                       Sys.Date(), ").tif")
     tiff(filename, plotsize, plotsize, res = 172, compression = "lzw")
   }  
   boxplot(misclass[, 1] ~ misclass[, 2], outline=FALSE, 
           ylab="Cross-validated misclassification rate",
           xlab="No. of Harmonics used in training")
-  if (saveplot == TRUE) {
+  if (saveplot) {
     dev.off()
     cat("\nThe plot is saved at:", 
         paste(getwd(), filename, sep="/"), "\n")

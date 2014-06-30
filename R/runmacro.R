@@ -8,7 +8,7 @@
 #'  see details
 #' @param savedir path to folder that the output files will be saved, see details.
 #' @param threshold numeric. threshold value to be passed to ImageJ. range within 
-#'  0-255, which is different from the \code{link{img2landmark}} that use a 0-1 range.
+#'  0-255, which is different from the \code{\link{img2landmark}} that use a 0-1 range.
 #' @return 
 #'  For each image, a file named \code{<image name>_shapedescriptors.txt} will be 
 #'  generated, containing calculated shape descriptor indices
@@ -36,22 +36,35 @@ runmacro <- function (imagejdir, opendir, savedir, threshold=30) {
     # check if the ImageJ folder exist
     if (imagej == "") {
       # if not, let the user to choose the directory
-      imagej <- choose.dir(caption="Select folder containing ImageJ's \"ij.jar\" file")
-      imagej <- gsub("\\", "/", imagej, fixed=TRUE)
+      if (Sys.info()['sysname'] == "Windows") 
+        imagej <- choose.dir(caption="Select folder containing ImageJ's \"ij.jar\" file")
+      else 
+        stop("you need to provide imagejdir (path to folder containing ImageJ's \"ij.jar\")")
     }
   } else {
-    imagej <- imagejdir
+    if (file.exists(imagejdir))
+      imagej <- imagejdir
+    else 
+      stop("imagejdir path (path to folder to find ImageJ's \"ij.jar\") not exist")
   }
   if (missing(opendir)) { 
-    opendir <- paste0(choose.dir(caption=
+    if (Sys.info()['sysname'] == "Windows") 
+      opendir <- paste0(choose.dir(caption=
                "Select input folder containing the images"),"\\")
-    opendir <- gsub("\\", "/", opendir, fixed=TRUE)
+    else
+      stop("you need to provide opendir (path to folder containing the images)")
   }
   if (missing(savedir)) {
-    savedir <- paste0(choose.dir(default=opendir, 
-               caption="Select output folder to save the outlines"),"\\")
-    savedir <- gsub("\\", "/", savedir, fixed=TRUE)
+    if (Sys.info()['sysname'] == "Windows")
+      savedir <- paste0(choose.dir(default=opendir, 
+               caption="Select output folder to save the shape indices result"),"\\")
+    else
+      stop("you need to provide savedir (path to folder to save the shape indices result")
   }
+  # normalize the path, avoid problem from shell in reading the path
+  imagej <- normalizePath(imagej, mustWork = TRUE)
+  opendir <- normalizePath(opendir, mustWork = TRUE)
+  savedir <- normalizePath(savedir, mustWork = TRUE)
   # the command to be passed to shell
   cmd <- paste("cd", imagej, "&& ij.jar", 
                "-macro batch_shape_indices_macro", 

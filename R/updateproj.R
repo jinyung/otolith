@@ -38,5 +38,5 @@ updateproj <- function(name, landmark=NULL, des=NULL, gpa=NULL, nef=NULL, pc=NUL
            har=har, class=des$sp)
   saveRDS(temp2, file=paste0(name))
   cat("The updated project is saved at:", 
-      paste(getwd(), name, sep="/"),"\n\n")
+      paste(name, sep="/"),"\n\n")
 }

@@ -3,7 +3,7 @@
 #' @description Predict new, unknown samples using either shape decriptors or 
 #'  semi-landmark configurations.
 #' @details The functions include the \code{\link{otosearch}} algorithm as a
-#'   mean to guess the semi-landmarks arragement (the four types of
+#'   means to guess the semi-landmarks arragement (the four types of
 #'   arrangements, see \code{\link{reland}}), so that the user can predict the
 #'   new, unknown samples even if the side and the direction of the otoliths are
 #'   unknown. This could be turned off using \code{reland=FALSE} to speed up the
@@ -19,22 +19,23 @@
 #'   configuration(s) to be predicted. If none is given, interactive file
 #'   selector will pop out to prompt user to select images to be searched
 #'   (Windows only)
-#' @param type type of data to predict.
-#' @param method classification method. see note.
+#' @param type type of data to predict
+#' @param method classification method. see Note
 #' @param har numeric. optional. By default \code{har} range saved in the
-#'   project is used. a different value could be set using this argument.
+#'   project is used. a different value could be set using this argument
 #' @param pc numeric. optional. By default \code{pc} range saved in the project
-#'   is used. a different value could be set using this argument.
+#'   is used. a different value could be set using this argument
 #' @param threshold numeric. optional. threshold value on posterior probalility 
 #'  to reject the prediction. see \code{\link{threcv}}. Currently works with 
-#'  \code{lda} only.
+#'  \code{lda} only
 #' @param reland logical. whether to do automatic re-arrangement of landmark- 
-#'   configuration.
+#'   configuration
 #' @param tol numeric. max limit of distance (see \code{\link{sprdist}}) to
 #'   which the automatic re-arrangement of landmark configuration should be
-#'   carried out.
-#' @param fix numeric. index of landmarks that should stay fixed. default is 
-#'   \code{NULL}, i.e. all semi-landmarks are slid.
+#'   carried out
+#' @param fix numeric. for \code{gpa} method. index of landmarks that should
+#'   stay fixed. default is \code{NULL}, i.e. all semi-landmarks are slid. see
+#'   Note
 #' @param mode  when \code{="search+pred"}, searching is included in addition to
 #'   prediction using \code{\link{otosearch}}. automatically changed to 
 #'   \code{"search+pred"} when \code{reland=TRUE}
@@ -42,8 +43,15 @@
 #' @param search.plot logical. whether to plot the search results. used only when
 #'  \code{reland = TRUE} or \code{mode = "search+pred"}
 #' @param ... other arguments passed to \code{\link{agglda}}
-#' @note Currently the \code{method} supported are limited to \code{"lda"} and
+#' @note 
+#'  Currently the \code{method} supported are limited to \code{"lda"} and
 #'  \code{\link{agglda}} only. 
+#'  
+#'  Because sliding semi-landmark method is not supported by
+#'  \code{\link{otosearch}}, thus the \code{project} used should contain \code{gpa}
+#'  object from non-sliding GPA transformation. Sliding will be performed by
+#'  \code{otopred} instead if \code{gpa} is the preferred method and 
+#'  \code{fix = NULL}. 
 #' @return matrix of prediction class and posterior probablity.
 #' @importFrom MASS lda
 #' @importFrom tree tree

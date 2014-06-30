@@ -21,7 +21,7 @@ routine1 <- function(imagejdir, write=TRUE, plot=FALSE, label=TRUE,
   if (missing(imagejdir)) {
     if (Sys.info()['sysname'] == "Windows")
       imagejdir <- choose.dir(default = getwd(), 
-                            caption = "Select folder containing the <name>_shapedescriptors.txt files")
+                   caption = "Select folder containing the shapedescriptors.txt files")
     else
       stop("you need to provide path to folder containing the shape descriptor files")
   }
@@ -46,13 +46,13 @@ routine1 <- function(imagejdir, write=TRUE, plot=FALSE, label=TRUE,
     desdatan$sp <- sp
   }
   if (write == TRUE) {
-    filename1 <- "combined_descriptors_complete.csv"
-    filename2 <- "combined_descriptors.csv"
+    filename1 <- paste0("combined_descriptors_complete(", Sys.Date(), ").csv")
+    filename2 <- paste0("combined_descriptors(", Sys.Date(), ").csv")
     write.csv(desdata, file=filename1, row.names=FALSE)
     write.csv(desdatan, file=filename2, row.names=FALSE)
     cat("\nThe combined file is saved at:\n1) ", 
-        paste(imagejdir, filename1, sep="/"),
-        "\n2) ", paste(imagejdir, filename2, sep="/"), "\n\n")
+        paste(getwd(), filename1, sep="/"),
+        "\n2) ", paste(getwd(), filename2, sep="/"), "\n\n")
   }
   if (plot == TRUE) {
     pca <- prcomp(desdatan[, 2:13], scale.=TRUE)

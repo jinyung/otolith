@@ -7,10 +7,12 @@
 #'  Default is all semilandmarks will be slided (See Note for issue).
 #' @param plotpca logical. whether to plot PCA for preliminary assessment of 
 #'  the data
-#' @param class factor giving the species/grouping, used for plotting purpose, 
-#'  e.g. using sp value from \code{\link{routine1}} or using \code{\link{getclass}}
+#' @param class factor giving the species/grouping, used for plotting purpose
+#'   and calculation of within class range of Procrustes distance, e.g. using sp
+#'   value from \code{\link{routine1}} or using \code{\link{getclass}}
 #' @return 
-#'  \item{tanc}{Procrustes aligned configurations projected onto tangent shape space}
+#'  \item{tanc}{Procrustes aligned configurations projected onto tangent shape
+#'    space}
 #'  \item{size}{centroid size}  
 #'  \item{expvar}{summary of expalined variations by each PC}
 #'  \item{score}{matrix contain the PC scores, to be used for training}
@@ -41,7 +43,8 @@ rGPA <- function(A, fix=NULL, plotpca=FALSE, class) {
     else 
       slide <- slide[-fix]
   }
-  gpa <- procSym(A, SMvector=slide, outlines=1:p)
+  A <- aligne(A)
+  gpa <- procSym(A, SMvector=slide, outlines=c(1:p, 1))
   size <- gpa$size
   tanc <- gpa$orpdata
   pca <- prcomp(as.data.frame(t(matrix(tanc, p * 2, n))))

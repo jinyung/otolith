@@ -2,8 +2,8 @@
 \alias{plotallo}
 \title{Plot allometric deformation}
 \usage{
-plotallo(gpa, group, target, col = 1, main = NULL, n = 40,
-  saveplot = FALSE, plotsize = 1300)
+plotallo(gpa, group, target, col = 1, main, n = 40, saveplot = FALSE,
+  plotsize = 1300)
 }
 \arguments{
   \item{gpa}{a \code{\link{rGPA}} object}
