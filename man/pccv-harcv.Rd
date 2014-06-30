@@ -5,14 +5,15 @@
 \usage{
 pccv(X, Y, pc, saveplot = FALSE, plotsize = 1000, method = c("lda", "tree", 
   "plsda"), run = 30, k = 5)
+  
 harcv(X, Y, har, saveplot = FALSE, plotsize = 1000, method = c("lda", "tree", 
   "plsda"), run = 30, k = 5)
 }
 
 \arguments{
   \item{X}{[for \code{pccv}] matrix of PC scores from \code{\link{rGPA}}
-  object (the \code{score} value)} [for \code{harcv}] matrix of EFA 
-  coefficients from \code{\link{rNEF}} object (the \code{coeff} value)
+  object (the \code{score} value) [for \code{harcv}] matrix of EFA 
+  coefficients from \code{\link{rNEF}} object (the \code{coeff} value)}
 
   \item{Y}{a factor giving the groupings, e.g. value from \code{\link{getclass}} 
   or the \code{sp} value from \code{\link{routine1}} object}

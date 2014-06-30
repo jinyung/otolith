@@ -55,7 +55,7 @@ situations.  \emph{Analytical and Bioanalytical Chemistry},
 390(5), 1261-1271.
 }
 \seealso{
-Similar: \code{\link{pccv}}, \code{\link{threcv}}
+Similar: \code{\link{pccv}}, \code{\link{harcv}}
 
 Which this function wraps: \code{\link{mrkfcv}}
 }

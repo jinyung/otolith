@@ -25,7 +25,7 @@
 #' @return a matrix and a plot are returned, giving the overall accuracy and 
 #'  the total reported prediction percentage over a range of threshold values. 
 #' @seealso 
-#'  Similar: \code{\link{pccv}}, \code{\link{threcv}}
+#'  Similar: \code{\link{pccv}}, \code{\link{harcv}}
 #'  
 #'  Which this function wraps: \code{\link{mrkfcv}}
 #' @export
@@ -59,7 +59,7 @@ threcv <- function(X, Y, saveplot=FALSE, plotsize=1000, run=30, k=5) {
   }
   if (saveplot == TRUE) {
     filename <- "threshold-optimization.tif"
-    tiff(filename, plotsize, plotsize, res=172)
+    tiff(filename, plotsize, plotsize, res=172, compression = "lzw")
   }  
   boxplot(result[, 1] ~ result[, 3], outline=FALSE, 
           ylab="Percentage", border=3, ylim=c(min(result[, 2]), 100), 

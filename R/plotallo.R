@@ -16,8 +16,9 @@
 #' @return just the plot
 #' @export
 
-plotallo <- function (gpa, group, target, col=1, main=NULL, 
-                      n=40, saveplot=FALSE, plotsize=1300) {
+plotallo <- function (gpa, group, target, col = 1, main = NULL, 
+                      n = 40, saveplot = FALSE, plotsize = 1300 
+                      ) {
   A <- gpa$tanc
   cens <- gpa$size
   max.spec <- A[, , which(group == target)][, , which(log(cens[which(
@@ -31,7 +32,8 @@ plotallo <- function (gpa, group, target, col=1, main=NULL,
     dev.new(width=13, height=4)
   if (saveplot == TRUE) {
     filename <- "plotallo.tif"
-    tiff(filename, plotsize, (plotsize - plotsize / 13) / 3, res=144)  
+    tiff(filename, plotsize, (plotsize - plotsize / 13) / 3, res = 144, 
+         compression = "lzw")  
   }
   par(mfrow=c(1, 3), mar=c(0, 0, 1, 0) + 0.5, font.main=3, cex.main=2)
     tps2(ref.spec, min.spec, n, A)

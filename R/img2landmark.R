@@ -135,9 +135,9 @@ img2landmark <- function (path, type = c("dir", "file"),
         remaining <- "estimating..." 
         if (i == 1 & !suppress & type == "dir") {
           cat("The input folder is selected as:", .getdir(imglist), 
-              "\nThe saving options are:\n\t\tsaveoutline\t\t:", saveoutline, 
-              "\n\t\tsavelandmark\t:", savelandmark, 
-              "\n\t\tplot\t\t\t\t\t\t\t\t\t:", plot, 
+              "\nThe saving options are:\n   saveoutline  :", saveoutline, 
+              "\n   savelandmark :", savelandmark, 
+              "   plot         :", plot, 
               "\n\n")      
         }
       } else {
@@ -153,6 +153,7 @@ img2landmark <- function (path, type = c("dir", "file"),
                length(imglist), ") ",  "; Estimated remaining time = ", 
                remaining, "                                 ")
             # \r rewrite current line, blank ensure clean overwrite 
+        flush.console()
       }
     }
   if (savelandmark) {

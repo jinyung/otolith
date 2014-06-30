@@ -35,6 +35,7 @@ pccv <- function(X, Y, pc, saveplot=FALSE, plotsize=1000,
   for (i in 1:pc) {
     cat ("\r                       (Evaluating PC: 1 - ", i,") | pccv progress: [",  
          round(i / pc * 100), "%]       ", sep="")
+    flush.console()
     temp <- mrkfcv(X=data.frame(selectdim(X, pc= i)), Y= Y, suppress="text", 
                    method=method, k=k, run=run) 
     # have to put X into data.frame because kfcv extract info using dim(), 
@@ -45,7 +46,7 @@ pccv <- function(X, Y, pc, saveplot=FALSE, plotsize=1000,
   }
   if (saveplot == TRUE) {
     filename <- "pc-optimization.tif"
-    tiff(filename, plotsize, plotsize, res=172)
+    tiff(filename, plotsize, plotsize, res = 172, compression = "lzw")
   }  
   boxplot(misclass[, 1] ~ misclass[, 2], outline=FALSE, 
           ylab="Cross-validated misclassification rate", 
