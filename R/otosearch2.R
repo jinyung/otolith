@@ -14,21 +14,22 @@
 #'  Which this function wraps: \code{\link{rotonto}}, \code{\link{kendalldist}}
 #' @keywords internal
 
-otosearch2 <- function(specimen, database, species=NULL, show=5) {
+otosearch2 <- function(specimen, database, 
+                       species = NULL, show = 5) {
   require(Morpho)
   if (dim(specimen)[1] != dim(database)[1])
     stop("the number of semi-landmarks differs between 
-         the specimen and the database")
+         the specimen and the reference specimens in database")
   rdist <- numeric()
   n <- dim(database)[3]
-  for (i in 1: n) {
-    temp <- rotonto(x=specimen, y=database[, , i])
-    rdist[i] <- kendalldist(temp$X, temp$Y)
+  for (i in 1:n) {
+    temp <- rotonto(y = specimen, x = database[, , i], scale = TRUE)$yrot
+    rdist[i] <- kendalldist(temp, database[, , i])
   }
   result <- round(data.frame(rdist), 5)
   result$label <- dimnames(database)[[3]]
   result$species <- species
   result <- result[order(result$rdist), ]
-  rownames(result) <- paste0("rank", 1:n)
+  rownames(result) <- paste0("rank-", 1:n)
   return(result = result[1:show, ])
 }

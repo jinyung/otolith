@@ -2,12 +2,13 @@
 \alias{otosearch}
 \title{Search new specimens' configuration against project database}
 \usage{
-otosearch(project, query, show = 5, saveresult = FALSE, name)
+otosearch(project, query, show = 5, saveresult = FALSE, showplot = TRUE,
+  name)
 }
 \arguments{
   \item{project}{path to a project (\code{.rds} file) to be
   read, saved using \code{\link{saveproj}}, or a project
-  object already read into R.  if not given, interactive
+  object already read into R. if not given, interactive
   file selector will pop out to prompt user to select a
   \code{.rds} file (Windows only)}
 
@@ -19,13 +20,18 @@ otosearch(project, query, show = 5, saveresult = FALSE, name)
   to prompt user to select images to be searched (Windows
   only)}
 
-  \item{show}{numeric. how many search results to be shown
-  (in order of ranking).}
+  \item{show}{integer. how many search results to be shown
+  (in order of ranking). Note that if number of specimens
+  in database searched against is less than show, the
+  result shown will be less than the given number}
 
-  \item{saveresult}{logical. whether to save the result.}
+  \item{saveresult}{logical. whether to save the result}
+
+  \item{showplot}{logical. whether to show plot of query
+  and their matches}
 
   \item{name}{character. optional. the file name, if
-  \code{saveresult=TRUE}.}
+  \code{saveresult=TRUE}}
 }
 \value{
 The search result. if \code{saveresult=TRUE}, the result is
@@ -46,7 +52,8 @@ the search is based on the Procrustes (Riemannian) distance
 between the query and the database. the lower the distance
 (\code{rdist}) between the query and the project's
 configuration, the higher their ranking in the search
-result. Perfect match will have 0 distance.
+result. Perfect match will have 0 distance (for non-sliding
+landmark method).
 
 To shorten the time of searching, the query is first
 searched against the meanshape configurations of each
@@ -64,6 +71,14 @@ the individuals of the top 5 closest species only.
 The search has taken the semi-landmarks configuration
 arrangements into consideration already, hence the user
 doesn't need to know the side/ direction of the query.
+
+\bold{Note:} sliding semi-landmark is currently not
+supported due to the difficulty to achieve short searching
+time and correct configuration guessing at the same time.
+Therefore the \code{gpa} object saved in the project should
+be built with fixed semi-landmarks. However, this does not
+affect \code{\link{otopred}}, thus if sliding is preferred,
+\code{otopred} will still give good predictions.
 }
 \seealso{
 Similar: \code{\link{otopred}}

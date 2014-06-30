@@ -14,20 +14,20 @@
 #' @keywords internal
 #' @export
 
-otosearch3 <- function(specimen, project, show=5) {
+otosearch3 <- function(specimen, project, show = 5) {
   require(Morpho)
   meanshape <- project$gpa$meanshape
   # first get specimen to (by-species) meanshape dist
   ms.rdist <- numeric() 
-  mslevel <- dim(meanshape)[3]
-  for (i in 1:mslevel) {
-    temp <- rotonto(x=specimen, y=meanshape[, , i])
+  mslevel <- dim(meanshape)[3]  
+  for (i in 1:mslevel) {  
+    temp <- rotonto(x = specimen, y=meanshape[, , i])
     ms.rdist[i] <- kendalldist(temp$X, temp$Y)
-    temp2 <- rotonto(x=reland(specimen, "rev"), y=meanshape[, , i])
+    temp2 <- rotonto(x = reland(specimen, "rev"), y = meanshape[, , i])
     ms.rdist[mslevel + i] <- kendalldist(temp2$X, temp2$Y)
-    temp3 <- rotonto(x=reland(specimen, "flip"), y=meanshape[, , i])
+    temp3 <- rotonto(x = reland(specimen, "flip"), y = meanshape[, , i])
     ms.rdist[mslevel * 2 + i] <- kendalldist(temp3$X, temp3$Y)
-    temp4 <- rotonto(x=reland(specimen, "fliprev"), y=meanshape[, , i])
+    temp4 <- rotonto(x = reland(specimen, "fliprev"), y = meanshape[, , i])
     ms.rdist[mslevel * 3 + i] <- kendalldist(temp4$X, temp4$Y)
   }
   distmax <- project$gpa$rdist[, 3]
@@ -42,9 +42,9 @@ otosearch3 <- function(specimen, project, show=5) {
         # first the original configuration
         clevel <- levels(project$class)[index[i]]
         Aindex <- which(project$class == clevel)
-        tresult <- otosearch2(specimen, project$landmark[, , Aindex], 
+        tresult <- otosearch2(specimen, project$gpa$tanc[, , Aindex], 
                    show=length(Aindex))
-        tresult$species <- rep(clevel, length(Aindex))
+        tresult$species <- rep(clevel, length(Aindex))        
         tresult$inside <- rep(TRUE, length(Aindex))
         tresult$orient <- rep("ori", length(Aindex))
         result <- rbind(result, tresult)
@@ -53,7 +53,7 @@ otosearch3 <- function(specimen, project, show=5) {
         clevel <- levels(project$class)[index[i] - mslevel]
         Aindex <- which(project$class == clevel)
         tresult <- otosearch2(reland(specimen, "rev"), 
-                   project$landmark[, , Aindex], show=length(Aindex))
+                   project$gpa$tanc[, , Aindex], show = length(Aindex))
         tresult$species <- rep(clevel, length(Aindex))
         tresult$inside <- rep(TRUE, length(Aindex))
         tresult$orient <- rep("rev", length(Aindex))
@@ -62,8 +62,8 @@ otosearch3 <- function(specimen, project, show=5) {
         # then the flipped configuration
         clevel <- levels(project$class)[index[i] - mslevel * 2]
         Aindex <- which(project$class == clevel)
-        tresult <- otosearch2(reland(specimen, "flip"), 
-                   project$landmark[, , Aindex], show=length(Aindex))
+        tresult <- otosearch2(reland(specimen, "flip"),
+                   project$gpa$tanc[, , Aindex], show = length(Aindex))
         tresult$species <- rep(clevel, length(Aindex))
         tresult$inside <- rep(TRUE, length(Aindex))
         tresult$orient <- rep("flip", length(Aindex))
@@ -73,13 +73,15 @@ otosearch3 <- function(specimen, project, show=5) {
         clevel <- levels(project$class)[index[i] - mslevel * 3]
         Aindex <- which(project$class == clevel)
         tresult <- otosearch2(reland(specimen, "fliprev"), 
-                   project$landmark[, , Aindex], show=length(Aindex))
+                   project$gpa$tanc[, , Aindex], show = length(Aindex))
         tresult$species <- rep(clevel, length(Aindex))
         tresult$inside <- rep(TRUE, length(Aindex))
         tresult$orient <- rep("fliprev", length(Aindex))
         result <- rbind(result,tresult)
       }    
     }
+    if (show > dim(result)[1])
+      show <- dim(result)[1] # so that show will always < results
     result <- result[order(result[, 1])[1:show], ]
     rownames(result) <- paste0("rank", 1:dim(result)[1])
   } else {
@@ -91,7 +93,7 @@ otosearch3 <- function(specimen, project, show=5) {
       if (index[i] <= mslevel) {
         clevel <- levels(project$class)[index[i]]
         Aindex <- which(project$class == clevel)
-        tresult <- otosearch2(specimen, project$landmark[, , Aindex], 
+        tresult <- otosearch2(specimen, project$gpa$tanc[, , Aindex], 
                    show=length(Aindex))
         tresult$species <- rep(clevel, length(Aindex))
         tresult$inside <- rep(FALSE, length(Aindex))
@@ -100,8 +102,8 @@ otosearch3 <- function(specimen, project, show=5) {
       } else if (index[i] <= mslevel * 2) {
         clevel <- levels(project$class)[index[i] - mslevel]
         Aindex <- which(project$class == clevel)
-        tresult <- otosearch2(reland(specimen, "rev"), 
-                   project$landmark[, , Aindex], show=length(Aindex))
+        tresult <- otosearch2(reland(specimen, "rev"),
+                   project$gpa$tanc[, , Aindex], show = length(Aindex))
         tresult$species <- rep(clevel, length(Aindex))
         tresult$inside <- rep(FALSE, length(Aindex))
         tresult$orient <- rep("rev", length(Aindex))
@@ -109,8 +111,8 @@ otosearch3 <- function(specimen, project, show=5) {
       } else if (index[i] <= mslevel * 3) {
         clevel <- levels(project$class)[index[i] - mslevel * 2]
         Aindex <-which(project$class == clevel)
-        tresult <- otosearch2(reland(specimen, "flip"), 
-                   project$landmark[, , Aindex], show=length(Aindex))
+        tresult <- otosearch2(reland(specimen, "flip"),
+                   project$gpa$tanc[, , Aindex], show = length(Aindex))
         tresult$species <- rep(clevel, length(Aindex))
         tresult$inside <- rep(FALSE, length(Aindex))
         tresult$orient <- rep("flip", length(Aindex))
@@ -119,15 +121,17 @@ otosearch3 <- function(specimen, project, show=5) {
         clevel <- levels(project$class)[index[i] - mslevel * 3]
         Aindex <- which(project$class == clevel)
         tresult <- otosearch2(reland(specimen, "fliprev"), 
-                   project$landmark[, , Aindex], show=length(Aindex))
+                   project$gpa$tanc[, , Aindex], show = length(Aindex))
         tresult$species <- rep(clevel, length(Aindex))
         tresult$inside <- rep(FALSE, length(Aindex))
         tresult$orient <- rep("fliprev", length(Aindex))
         result <- rbind(result, tresult)
       }
     }
+    if (show > dim(result)[1])
+      show <- dim(result)[1] # so that show will always < results
     result <- result[order(result[, 1])[1:show], ]
     rownames(result) <- paste0("rank", 1:dim(result)[1])
   }
-  return(result=result)
+  return(result = result)
 }
