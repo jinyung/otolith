@@ -1,30 +1,32 @@
 #' Re-arrage semi-landmark configuration
 #' 
-#' @description To flip or change the order of semi-landmark configuration 
+#' @description To flip or change the order of semi-landmark configuration
 #' @param landdata semi-landmarks data generated from \code{\link{equaldist}} 
-#'  functions. A matrix/dataframe consists of two columns of x and y coordinates
-#' @param type character of \code{"ori"}, \code{"rev"}, \code{"flip"}, 
-#'  or \code{"fliprev"} to set the configuration of the semi-landmarks. See details. 
-#' @return matrix of xy coordinates of re-arranged semi-landmarks data. 
-#' @details There are four possible configurations of semi-landmark sampling for 
-#'  any set of otolith, depending on the side of the otolith and the initial 
-#'  orietation of the image. This function can be used to standardize the sampling
-#'  of semi-landmarks. 
+#'   functions. A matrix/dataframe consists of two columns of x and y
+#'   coordinates
+#' @param type character of \code{"ori"}, \code{"rev"}, \code{"flip"}, or
+#'   \code{"fliprev"} to set the configuration of the semi-landmarks. See
+#'   details.
+#' @return matrix of xy coordinates of re-arranged semi-landmarks data.
+#' @details There are four possible configurations of semi-landmark sampling for
+#'   any set of otolith, depending on the side of the otolith and the initial 
+#'   orietation of the image. This function can be used to standardize the
+#'   sampling of semi-landmarks.
 #'  
-#'  \code{type} argument change the semi-landmarks as if the otolith image
-#'  was taken from different end on the left (\code{"rev"}), 
-#'  or as if the otolith is from the other side (\code{"flip"}), 
-#'  or as if the otolith is from the other side and image taken from different 
-#'  end on the left (\code{"fliprev"}). \code{"ori"} do nothing on the semi-landmarks.  
-#' @importFrom secr flip
+#' \code{type} argument change the semi-landmarks as if the otolith image was
+#' taken from different end on the left (\code{"rev"}), or as if the otolith is
+#' from the other side (\code{"flip"}), or as if the otolith is from the other
+#' side and image taken from different end on the left (\code{"fliprev"}).
+#' \code{"ori"} do nothing on the semi-landmarks.
 #' @export
 
-reland <- function (landdata, type=c("ori", "rev", "flip", "fliprev")) {
-  require(secr)
+reland <- function (landdata, type = c("ori", "rev", "flip", "fliprev")) {
+  type <- match.arg(type)
   nd <- dim(landdata)[1] / 2
   landdatanew <- landdataF <- landdataFN <- 
-    array(data = NA,  dim=c(dim(landdata)[1], 2))
-  landdataF <- flip(landdata, lr=TRUE)
+    array(data = NA,  dim = c(dim(landdata)[1], 2))
+  landdataF <- landdata
+  landdataF[, 1] <- -landdataF[, 1] # flipping
   landdataFN[1, ] <- landdataF[nd + 1, ]
   landdataFN[nd + 1, ] <- landdataF[1, ]
   landdataFN[2:nd, ] <- landdataF[nd:2, ]
