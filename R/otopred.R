@@ -19,6 +19,8 @@
 #'   configuration(s) to be predicted. If none is given, interactive file
 #'   selector will pop out to prompt user to select images to be searched
 #'   (Windows only)
+#' @param multiview logical. combination of different views for prediction. see
+#'  details   
 #' @param type type of data to predict
 #' @param method classification method. see Note
 #' @param har numeric. optional. By default \code{har} range saved in the
@@ -65,60 +67,104 @@
 #'    \code{\link{tree}}, \code{\link{agglda}}
 #' @export
 
-otopred <- function(project, query, type = c("nef", "gpa", "des"),  
+otopred <- function(project, query, multiview = FALSE, 
+                    type = c("nef", "gpa", "des"),  
                     method = c("lda", "agglda", "tree", "plsda"), har, pc, 
                     threshold, reland = TRUE, tol = 0.2, fix = NULL, 
-                    mode = c("pred", "search+pred"), write = FALSE, 
+                    mode = c("pred", "search+pred"), saveresult = FALSE, 
                     search.plot = FALSE, ...) {
   type <- match.arg(type)
   method <- match.arg(method)
-  # get the project / query, copied from otosearch
-  # get the project databse
-  if (missing(project)) {
-    if (Sys.info()['sysname'] == "Windows") 
-      project <- readRDS(choose.files(getwd(), caption = 
-                 "Select project containing the database", multi = FALSE, 
-                 filters = c("Project (*.rds)", "*.rds; *.RDS")))
-    else 
-      stop("Please provide the project")
+  mode <- match.arg(mode)
+  # support for combined views, but with less features
+  if (multiview) { 
+    if (any((names(project) == names(query)) == FALSE))
+      stop("project list should match the query list")
+    if (reland | mode == "search+pred")
+      stop("search mode is not supported with multiview now, ", 
+           "please set reland = FALSE")
+    if (type == "nef" | type == "gpa") {
+      nq <- sapply(query, function(x) dim(x)[3])
+      if (diff(range(nq)) != 0) # do all query views have same n?
+        stop("query from different views do not have same n")
+      np <- sapply(project, function(x) dim(x$landmark)[3])
+      if (diff(range(np)) != 0) # do all project views have same n?
+        stop("landmark from different projects do not have same n") 
+      if (type == "nef") { # check if har is null
+        harp <- sapply(project, function(x) x$har)
+        if (any(is.null(harp)))
+          stop("all projects must contain har number")
+      } else if (type == "gpa") { # check if pc is null
+        pcp <- sapply(project, function(x) x$pc)
+        if (any(is.null(pcp)))
+          stop("all projects must contain pc number")
+      }
+      pq <- sapply(query, function(x) dim(x)[1])
+      pp <- sapply(project, function(x) dim(x$landmark)[1])
+      if (any((pq == pp) == FALSE))
+        stop("project and query do not have the same number of landmarks")
+    }
+    view.names <- names(project)
+    view.length <- length(view.names)
+    class <- project[[1]]$class    
   } else {
-    if (.isproj(project))
-      project <- project
-    else if (is.character(project)) {
-      if (file.exists(project) & .ext(project) == "rds" | .ext(project) == "RDS")
-        project <- readRDS(project)
-      else
-        stop("Please provide right format of project")
-    } else 
-      stop("Please provide right format of project")
+    class <- project$class
+    # get the project / query, copied from otosearch
+    # get the project database
+      if (missing(project)) {
+        if (Sys.info()['sysname'] == "Windows") 
+          project <- readRDS(choose.files(getwd(), caption = 
+                     "Select project containing the database", multi = FALSE, 
+                     filters = c("Project (*.rds)", "*.rds; *.RDS")))
+        else 
+          stop("Please provide the project")
+      } else {
+        if (.isproj(project))
+          project <- project
+        else if (is.character(project)) {
+          if (file.exists(project) & .ext(project) == 
+                "rds" | .ext(project) == "RDS")
+            project <- readRDS(project)
+          else
+            stop("Please provide right format of project")
+        } else 
+            stop("Please provide right format of project")
+      }
   }
   # get the query/ determine the query type
-  if (missing(query)) { # interactive selection if path not specified
-    query <- img2landmark(type = "file", saveoutline = FALSE, 
-                          savelandmark = FALSE)$landmark  
-  } else if (is.character(query)) { # is it even a character (path)?
-    if (!any(file.exists(query))) # ok, so is it a legit path?
-      stop("path(s) given do not exist, please check again")
-    if (any(.ext(query) == "tps")) {
-      if (length(query) > 1)
-        stop("multiple .tps files are not allowed")
-      require(geomorph)
-      query <- readland.tps(query, specID="ID")
+  if (!multiview) {
+    if (type == "nef" || type == "gpa") {
+      if (missing(query)) { # interactive selection if path not specified
+        query <- img2landmark(type = "file", saveoutline = FALSE, 
+                              savelandmark = FALSE)$landmark  
+      } else if (is.character(query)) { # is it even a character (path)?
+        if (!any(file.exists(query))) # ok, so is it a legit path?
+          stop("path(s) given do not exist, please check again")
+        if (any(.ext(query) == "tps")) {
+          if (length(query) > 1)
+            stop("multiple .tps files are not allowed")
+          require(geomorph)
+          query <- readland.tps(query, specID="ID")
+        } else {
+          if (file.info(query)$isdir) # ok, is the path given dir?
+            pathtype <- "dir"
+          else 
+            pathtype <- "file"
+          query <- img2landmark(query, type = pathtype, saveoutline = FALSE, 
+                              savelandmark = FALSE)$landmark    
+        }
+      } else if (is.matrix(query) | is.array(query)) { # if not path, is it config?
+        query <- query  
+      } else { # not path nor config, error
+        stop(paste("query should be path(in character) OR",
+                   "matrix/ array of semi-landmark configuration(s) OR",
+                   "a .tps file containing the configurations"))
+      }
+    } else if (type == "des") {
+        if (!is.data.frame(query))
+          stop("Please provide a dataframe containing shape descriptors")
     }
-    if (file.info(query)$isdir) # ok, is the path given dir?
-      pathtype <- "dir"
-    else 
-      pathtype <- "file"
-    query <- img2landmark(query, type = pathtype, saveoutline = FALSE, 
-                          savelandmark = FALSE)$landmark    
-  } else if (is.matrix(query) | is.array(query)) { # if not path, is it config?
-    query <- query  
-  } else { # not path nor config, error
-    stop(paste("query should be path(in character) OR",
-               "matrix/ array of semi-landmark configuration(s) OR",
-               "a .tps file containing the configurations"))
   }
-  
   # taking care of orientation issue with otosearch()
   if (reland)
     mode <- "search+pred"
@@ -141,100 +187,76 @@ otopred <- function(project, query, type = c("nef", "gpa", "des"),
         }
       }
     }
-  }  
+  }
+  # initialize variables for multiview option
+  if (multiview) {
+    newdata <- vector("list", view.length)
+    moddata <- vector("list", view.length)
+  }
+  # going thru type of choice
   if (type == "nef") {
-    if (missing(har)) {
-      if (!is.null(project$har)) 
-        har <- project$har
-      else 
-        stop("please provide har value")
-    }
-    newdata <- selectdim(rNEF(query)$coeff, har=har)
-    if (method == "lda")
-      mod <- lda(x=selectdim(project$nef$coeff, har=har), project$class)      
-  } else if (type == "gpa") {
-    # set sliding param
-    p <- dim(query)[1]
-    n <- dim(query)[3]
-    slide <- 1:p
-    dorelax <- TRUE
-    if (!is.null(fix)) {
-      if (length(slide[-fix]) == 0)
-        dorelax <- FALSE
-      else {
-        slide <- slide[-fix]
-        outline <- slide
+    if(!multiview) {
+      if (missing(har)) {
+        if (!is.null(project$har)) 
+          har <- project$har
+        else 
+          stop("please provide har value")
       }
+      newdata <- selectdim(rNEF(query)$coeff, har=har)
+      moddata <- selectdim(project$nef$coeff, har=har)
     } else {
-      outline <- c(slide, 1)
-    }
-    # superimpose on the database meanshape
-    rot <- array (data=NA, dim= c(p, 2, n))
-    if (dorelax) {
-      sink("NUL") # suppress procSym cat()
-      gpanew <- rGPA(project$landmark, fix = fix, class = project$class)
-      sink() # suppress procSym cat()
-    } else
-      gpanew <- project$gpa
-    for (i in 1:n) {
-      if (dorelax) {
-        sink("NUL") # suppress relaxLM cat(), only works in Windows
-        rot[, , i] <- relaxLM(query[, , i], gpanew$mshape, SMvector = slide, 
-                              outlines = outline)
-        sink() # suppress relaxLM cat()
-      } else {
-        rot[, , i] <- query[, , i]
+      for (i in 1:view.length) {
+        newdata[[i]] <- selectdim(rNEF(query[[i]])$coeff, har=project[[i]]$har)
       }
-      rot[, , i] <- rotonto(gpanew$mshape, rot[, , i], scale = TRUE)$yrot
-    }
-    query.score <- predict(gpanew$pca, 
-                           as.data.frame(t(matrix(rot, p * 2, n))))
-    if (missing(pc)) {
-      if (!is.null(project$pc))
-        pc <- project$pc
-      else
-        stop("please provide pc value")
-    }
-    newdata <- selectdim(query.score, pc=pc)    
-    if (method == "lda")
-      mod <- lda(x=selectdim(gpanew$score, pc=pc), project$class)  
+      for (i in 1:view.length) {
+        moddata[[i]] <- selectdim(project[[i]]$nef$coeff, har = project[[i]]$har)
+      }
+    } 
+  } else if (type == "gpa") {
+      if (!multiview) {
+        temp <- .GPApred(project=project, query = query, fix = fix, pc = pc)
+        newdata <- temp$newdata
+        moddata <- temp$moddata    
+      } else {
+        for (i in 1:view.length) {
+          temp <- .GPApred(project[[i]], query[[i]], fix = fix, 
+                                  pc = project[[i]]$pc)
+          newdata[[i]] <- temp$newdata
+          moddata[[i]] <- temp$moddata
+        }
+      }
   } else if (type == "des") {
-    if (is.array(query))
-      stop ("query data type wrong")
-    newdata <- query[, c("AspRatio", "Circ", "Roundness", "Compactness", 
-               "Solidity", "Convexity", "Shape", "RFactor", "ModRatio")]
-    if (method == "lda") {
-      require(MASS)
-      mod <- lda(x=project$des[, c("AspRatio", "Circ", "Roundness","Compactness",
-             "Solidity", "Convexity", "Shape", "RFactor", "ModRatio")], 
-             project$class)
-    }
-  }  
+      des.predictors <- c("AspRatio", "Circ", "Roundness", "Compactness", 
+                    "Solidity", "Convexity", "Shape", "RFactor", "ModRatio")
+      if (!multiview) {
+        newdata <- query[, des.predictors]
+        moddata <- project$des[, des.predictors]
+      } else {
+        for (i in 1:view.length) {
+          newdata[[i]] <- query[[i]][, des.predictors]
+          moddata[[i]] <- project[[i]]$des[, des.predictors]
+        }
+      }
+  }
+  # cbind for newdata(query) and moddata(training) for multiview
+  if (multiview) {
+    newdata <- do.call(cbind, newdata)
+    moddata <- do.call(cbind, moddata)    
+  }
+  # going through method of choice
   if (method == "lda") {
+    mod <- lda(x=moddata, class)
     prediction <- predict(mod, newdata=newdata)
     result <- data.frame(prediction$class)
     result$posterior <- round(apply(prediction$posterior, 1, max), 2)
     if (!missing(threshold))
-      result$prediction.class[which(result$posterior < threshold)] <- NA
-    if (type == "nef" || type == "gpa") {
-      if(!is.null(dimnames(query)[[3]]))
-        rownames(result) <- dimnames(query)[[3]]
-      else
-        rownames(result) <- paste0("Query", 1:dim(result)[1])
-    } else if (type == "des") {
-      rownames(result) <- query[,"Label"]
-    }
+      result$prediction.class[which(result$posterior < threshold)] <- NA    
   } else if (method == "agglda") {
     require(MASS)
-    traindat <- switch(type, gpa = selectdim(gpanew$score, pc=pc),
-                       nef = selectdim(project$nef$coeff, har=har), 
-                       des = project$des[, c("AspRatio", "Circ", 
-                                             "Roundness","Compactness",
-                                             "Solidity", "Convexity", 
-                                             "Shape", "RFactor", "ModRatio")]
-                       )
-    result <- agglda(X = traindat, Y = project$class, newdata = newdata, 
+    result <- agglda(X = moddata, Y = class, 
+                     newdata = as.matrix(newdata), 
                      threshold = threshold, suppress = TRUE, ...)
+    colnames(result)[1] <- c("prediction.class")
   } else if (method == "tree") {
     require(tree)
     # to be added 
@@ -242,11 +264,23 @@ otopred <- function(project, query, type = c("nef", "gpa", "des"),
     require(mixOmics)
     # to be added
   }
-  if (write == TRUE) {
+  # change the row names of result
+  if (multiview)
+    query <- query[[1]]
+  if (type == "nef" || type == "gpa") {
+    if (!is.null(dimnames(query)[[3]]))
+      rownames(result) <- dimnames(query)[[3]]
+    else
+      rownames(result) <- paste0("Query", 1:dim(result)[1])
+  } else if (type == "des") {
+    rownames(result) <- query[, "Label"]
+  }
+  #save result
+  if (saveresult) {
     name <- paste0("otopred-result(", Sys.Date(), ").txt")
-    write.csv(result, file=name, append=TRUE)
+    write.table(result, file = name, sep = "\t", quote = FALSE)
     cat("\n\n**The prediction result is saved at:", 
-    paste(getwd(), name, sep="/"))
+    paste(getwd(), name, sep = "/"), "\n\n")
   }
   return(result)
 }

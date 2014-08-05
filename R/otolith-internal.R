@@ -58,7 +58,7 @@
 
 #---------------------------------------------------------
 
-# internal function wrapped under agglda()
+# internal function wrapped under agglda(), do k-fold sampling aggregation
 
 .kflda <- function(X, Y, newdata = NULL, k = 5, 
                    prior = c("equal", "proportion")) {
@@ -119,4 +119,59 @@
     }     
   }
   return(list(agg.class = agg.class, agg.posterior = agg.posterior))
+}
+
+#---------------------------------------------------------
+
+# predicting based on sliding GPA
+
+
+.GPApred <- function(project, query, fix = NULL, pc) {
+  require(Morpho)  
+  # set sliding param
+    p <- dim(query)[1]
+    n <- dim(query)[3]
+    slide <- 1:p
+    dorelax <- TRUE
+    if (!is.null(fix)) {
+      if (length(slide[-fix]) == 0)
+        dorelax <- FALSE
+      else {
+        slide <- slide[-fix]
+        outline <- slide
+      }
+    } else {
+      outline <- c(slide, 1)
+    }
+    # superimpose on the database meanshape
+    rot <- array (data = NA, dim = c(p, 2, n))
+    if (dorelax) {
+      sink("NUL") # suppress procSym cat()
+      gpanew <- rGPA(project$landmark, fix = fix, class = project$class)
+      sink() # suppress procSym cat()
+    } else
+      gpanew <- project$gpa
+    for (i in 1:n) {
+      if (dorelax) {
+        sink("NUL") # suppress relaxLM cat(), only works in Windows
+        rot[, , i] <- relaxLM(query[, , i], gpanew$mshape, SMvector = slide, 
+                              outlines = outline)
+        sink() # suppress relaxLM cat()
+      } else {
+        rot[, , i] <- query[, , i]
+      }
+      rot[, , i] <- rotonto(gpanew$mshape, rot[, , i], scale = TRUE)$yrot
+    }
+    query.score <- predict(gpanew$pca, 
+                           as.data.frame(t(matrix(rot, p * 2, n))))
+    if (missing(pc)) {
+      if (!is.null(project$pc))
+        pc <- project$pc
+      else
+        stop("please provide pc value")
+    }
+    newdata <- selectdim(query.score, pc=pc)    
+    moddata <- selectdim(gpanew$score, pc=pc) 
+    sink()
+    return(list(newdata = newdata, moddata = moddata))
 }

@@ -2,10 +2,10 @@
 \alias{otopred}
 \title{Predict new samples based on classification models}
 \usage{
-otopred(project, query, type = c("nef", "gpa", "des"), method = c("lda",
-  "agglda", "tree", "plsda"), har, pc, threshold, reland = TRUE, tol = 0.2,
-  fix = NULL, mode = c("pred", "search+pred"), write = FALSE,
-  search.plot = FALSE, ...)
+otopred(project, query, multiview = FALSE, type = c("nef", "gpa", "des"),
+  method = c("lda", "agglda", "tree", "plsda"), har, pc, threshold,
+  reland = TRUE, tol = 0.2, fix = NULL, mode = c("pred", "search+pred"),
+  saveresult = FALSE, search.plot = FALSE, ...)
 }
 \arguments{
   \item{project}{path to a project (\code{.rds} file) to be
@@ -21,6 +21,9 @@ otopred(project, query, type = c("nef", "gpa", "des"), method = c("lda",
   predicted. If none is given, interactive file selector
   will pop out to prompt user to select images to be
   searched (Windows only)}
+
+  \item{multiview}{logical. combination of different views
+  for prediction. see details}
 
   \item{type}{type of data to predict}
 
