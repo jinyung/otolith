@@ -3,7 +3,7 @@
 \title{Search new specimens' configuration against project database}
 \usage{
 otosearch(project, query, show = 5, saveresult = FALSE, showplot = TRUE,
-  name)
+  savename)
 }
 \arguments{
   \item{project}{path to a project (\code{.rds} file) to be
@@ -13,12 +13,12 @@ otosearch(project, query, show = 5, saveresult = FALSE, showplot = TRUE,
   \code{.rds} file (Windows only)}
 
   \item{query}{path(s) to otolith images/ path(s) of folder
-  containing the otolith images/ code{.tps} file containing
-  the semi-landmark configurations/ p x k matrix or p x k x
-  n array of semi-landmark configuration(s) to be searched.
-  If none is given, interactive file selector will pop out
-  to prompt user to select images to be searched (Windows
-  only)}
+  containing the otolith images/ \code{.tps} file
+  containing the semi-landmark configurations/ p x k matrix
+  or p x k x n array of semi-landmark configuration(s) to
+  be searched. If none is given, interactive file selector
+  will pop out to prompt user to select images to be
+  searched (Windows only)}
 
   \item{show}{integer. how many search results to be shown
   (in order of ranking). Note that if number of specimens
@@ -30,7 +30,7 @@ otosearch(project, query, show = 5, saveresult = FALSE, showplot = TRUE,
   \item{showplot}{logical. whether to show plot of query
   and their matches}
 
-  \item{name}{character. optional. the file name, if
+  \item{savename}{character. optional. the file name, if
   \code{saveresult=TRUE}}
 }
 \value{
@@ -48,7 +48,7 @@ search the semi-landmarks configuration(s) of new, unknown
 specimens against the configurations saved in the project.
 }
 \details{
-the search is based on the Procrustes (Riemannian) distance
+The search is based on the Procrustes (Riemannian) distance
 between the query and the database. the lower the distance
 (\code{rdist}) between the query and the project's
 configuration, the higher their ranking in the search

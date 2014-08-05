@@ -3,7 +3,8 @@
 #' @description search the semi-landmarks configuration(s) of new, unknown
 #'   specimens against the configurations saved in the project.
 #'  
-#' @details the search is based on the Procrustes (Riemannian) distance between
+#' @details 
+#'   The search is based on the Procrustes (Riemannian) distance between
 #'   the query and the database. the lower the distance (\code{rdist}) between
 #'   the query and the project's configuration, the higher their ranking in the
 #'   search result. Perfect match will have 0 distance (for non-sliding landmark
@@ -36,7 +37,7 @@
 #'   given, interactive file selector will pop out to prompt user to select a
 #'   \code{.rds} file (Windows only)
 #' @param query path(s) to otolith images/ path(s) of folder containing the
-#'   otolith images/ code{.tps} file containing the semi-landmark
+#'   otolith images/ \code{.tps} file containing the semi-landmark
 #'   configurations/ p x k matrix or p x k x n array of semi-landmark
 #'   configuration(s) to be searched. If none is given, interactive file
 #'   selector will pop out to prompt user to select images to be searched
@@ -46,7 +47,7 @@
 #'   less than show, the result shown will be less than the given number
 #' @param saveresult logical. whether to save the result
 #' @param showplot logical. whether to show plot of query and their matches
-#' @param name character. optional. the file name, if \code{saveresult=TRUE}
+#' @param savename character. optional. the file name, if \code{saveresult=TRUE}
 #' @return The search result. if \code{saveresult=TRUE}, the result is written 
 #'   into a \code{.txt} file. The results include:
 #'    \itemize{ 
@@ -58,13 +59,13 @@
 #'    \item \code{orient}: type of configuration that match 
 #'    }   
 #' @importFrom geomorph readland.tps
-# @importFrom Morpho relaxLM
 #' @seealso 
 #'  Similar: \code{\link{otopred}}
 #' @export
+# hierarchy for otosearch: otosearch > otosearch3 > otosearch2  
 
 otosearch <- function(project, query, show = 5, saveresult = FALSE, 
-                      showplot = TRUE, name) {
+                      showplot = TRUE, savename) {
   # Note: sliding is currently unsupported
   # get the project database
   if (missing(project)) {
@@ -85,6 +86,9 @@ otosearch <- function(project, query, show = 5, saveresult = FALSE,
     } else 
       stop("Please provide right format of project")
   }
+  # error message
+  if (is.null(dimnames(project$landmark)[[3]]))
+    stop("landmarks of project should be named")
   # get the query/ determine the query type
   if (missing(query)) { # interactive selection if path not specified
     query <- img2landmark(type = "file", saveoutline = FALSE, 
@@ -97,13 +101,14 @@ otosearch <- function(project, query, show = 5, saveresult = FALSE,
         stop("multiple .tps files are not allowed")
       require(geomorph)
       query <- readland.tps(query, specID="ID")
-    }
-    if (file.info(query)$isdir) # ok, is the path given dir?
-      pathtype <- "dir"
-    else 
-      pathtype <- "file"
-    query <- img2landmark(query, type = pathtype, saveoutline = FALSE, 
+    } else {
+      if (file.info(query)$isdir) # ok, is the path given dir?
+        pathtype <- "dir"
+      else 
+        pathtype <- "file"
+      query <- img2landmark(query, type = pathtype, saveoutline = FALSE, 
                           savelandmark = FALSE)$landmark    
+    }
   } else if (is.matrix(query) | is.array(query)) { # if not path, is it config?
     query <- query  
   } else { # not path nor config, error
@@ -111,21 +116,8 @@ otosearch <- function(project, query, show = 5, saveresult = FALSE,
          "matrix/ array of semi-landmark configuration(s) OR",
          "a .tps file containing the configurations"))
   }
-#   # sliding settings
-#   p <- dim(query)[1]
-#   slide <- 1:p
-#   dorelax <- TRUE
-#   if (!is.null(fix)) {
-#     if (length(slide[-fix]) == 0)
-#       dorelax <- FALSE
-#     else {
-#       slide <- slide[-fix]
-#       outline <- slide
-#     }
-#   } else {
-#     outline <- c(slide, 1)
-#   }
   # determine one specimen or multi specimens
+  p <- dim(query)[1]
   if (is.matrix(query)) { # matrix, single specimen
     query <- array(query, dim = c(p, 2, 1), dimnames = list(NULL, NULL, "Query"))
   }   
@@ -142,14 +134,8 @@ otosearch <- function(project, query, show = 5, saveresult = FALSE,
       pb <- txtProgressBar(1, n, style = 3, char = "|")  
     # looping thru the queries
     for (i in 1:n) {
-#       if (dorelax) {
-#         sink("NUL") # suppress relaxLM cat(), only works in Windows
-#         query[, , i] <- relaxLM(query[, , i], project$gpa$mshape, 
-#                                 SMvector = slide, outline = outline)
-#         sink() # suppress relaxLM cat()
-#       }
-      result[[i]] <- otosearch3(specimen = query[, , i],
-                                project = project, show = show)
+        result[[i]] <- otosearch3(specimen = query[, , i],
+                                  project = project, show = show)
       # some result may be shorter than show
       if (show > dim(result[[i]])[1])
         shown <- dim(result[[i]])[1] # shown the variable to loop later
@@ -171,32 +157,36 @@ otosearch <- function(project, query, show = 5, saveresult = FALSE,
         dev.new(width = cn * 3, height = rn * 3) # new dev for each query
         par(mfrow = c(rn, cn), mar = c(0, 0, 0, 0))
         # plot the query first
-        query.plot <- aligne2(query[, , i])
-        p <- dim(query[, , i])[1]
-        if (query.plot[1, 1] > query.plot[p/2, 1] & 
-              query.plot[p/4, 2] < query.plot[3*p/4, 2]) {
-          query.plot <- -query.plot
-        }
-        plot(query.plot, asp = 1, type = "n", axes = FALSE)
-        polygon(query.plot, border = "blue")
-        text(mean(query.plot[, 1]), mean(query.plot[, 2]), 
-               c(paste0("Query #", i)), bty = "n")
+        if (!is.null(dimnames(query)[[3]]))
+          query.label <- dimnames(query)[[3]][i]
+        else
+          query.label <- ""
+        # set the xlim and ylim of the plots
+        r1 <- range(query[, 1, i])
+        r2 <- range(query[, 2, i])
+        r1.1<- abs(r1[2] - r1[1])
+        r2.1<- abs(r2[2] - r2[1])
+        xlim<- c(r1[1] - r1.1/20, r1[2] + r1.1/20)
+        ylim<- c(r2[1] - r2.1/20, r2[2] + r2.1/20)
+        plot(query[, , i], asp = 1, type = "n", axes = FALSE, xlim = xlim, 
+             ylim = ylim)
+        polygon(query[, , i], border = "blue")
+        text(mean(query[,1 , i]), mean(query[,2 , i]), 
+               c(paste0("Query #", i, "\n", query.label)), bty = "n")
         # insert the index into result too
         result[[i]]$index.in.db <- NA 
         # then plot the matches 1 by 1
         for (j in 1:shown) { 
           index <- which(dimnames(project$landmark)[[3]] == 
-                           result[[i]]$label[j])
+                             result[[i]]$label[j])
           result[[i]]$index.in.db[j] <- index
-           plotorient <- result[[i]]$orient[j]
-          match <- project$gpa$tanc[, , index]
-          # rotate the matches according to orient
-          switch(plotorient, ori = {match <- match; matchlab <- "original"}, 
-                 rev = {match <- -match; matchlab <- "diff direction"}, 
-                 flip = {match[, 1] <- -match[, 1]; matchlab<- "diff side"}, 
-                 fliprev = {match[, 2] <- -match[, 2]
-                 matchlab <- "diff direction + side"}) 
-          plot(match, asp = 1, type = "n", axes = FALSE)
+            plotorient <- result[[i]]$orient[j]
+          match <- project$landmark[, , index]
+          matchlab <- switch(plotorient, ori = "original", rev = "diff direction", 
+                 flip = "diff side", fliprev = "diff direction + side")
+          match <- rotonto(x = query[, , i], y = reland(match, plotorient), 
+                                scale = TRUE, reflection = FALSE)$yrot
+          plot(match, asp = 1, type = "n", axes = FALSE, xlim = xlim, ylim = ylim)
           polygon(match)
           text(mean(match[,1]), mean(match[,2]), 
                paste0(paste0("Match #", j), "\n", result[[i]]$label[j], 
@@ -218,11 +208,11 @@ otosearch <- function(project, query, show = 5, saveresult = FALSE,
     }
   }
   if (saveresult) {
-    if (missing(name))
-      name <- paste0("otosearchresult(", Sys.Date(), ")")
-    lapply(result, capture.output, file = paste0(name, ".txt"), append = TRUE)
+    if (missing(savename))
+      savename <- paste0("otosearchresult(", Sys.Date(), ")")
+    lapply(result, capture.output, file = paste0(savename, ".txt"), append = TRUE)
     cat("\n\n**The search result is saved at:", 
-        paste(getwd(), paste0(name, ".txt"), sep = "/"))
+        paste(getwd(), paste0(savename, ".txt"), sep = "/"))
   }
   cat("\n\n")
   return(result)

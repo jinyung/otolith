@@ -20,16 +20,17 @@ otosearch2 <- function(specimen, database,
   if (dim(specimen)[1] != dim(database)[1])
     stop("the number of semi-landmarks differs between 
          the specimen and the reference specimens in database")
-  rdist <- numeric()
   n <- dim(database)[3]
+  rdist <- numeric()
   for (i in 1:n) {
-    temp <- rotonto(y = specimen, x = database[, , i], scale = TRUE)$yrot
-    rdist[i] <- kendalldist(temp, database[, , i])
-  }
+    temp <- rotonto(x = specimen, y = database[, , i], scale = TRUE, 
+                    reflection = FALSE)
+    rdist[i] <- kendalldist(temp$yrot, specimen)
+  } # in rotonto, x is fixed, y is rotated
   result <- round(data.frame(rdist), 5)
   result$label <- dimnames(database)[[3]]
   result$species <- species
   result <- result[order(result$rdist), ]
   rownames(result) <- paste0("rank-", 1:n)
-  return(result = result[1:show, ])
+  return(result[1:show, ])
 }
