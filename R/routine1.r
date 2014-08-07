@@ -39,6 +39,7 @@ routine1 <- function(imagejdir, write=TRUE, plot=FALSE, label=TRUE,
   cat("---Reading shape descriptor files ended---\n")  
   # write the combined files into a new csv file
   desdatan <- desdata[, -c(2:22, 23:33, 37:39, 42, 48)]
+  rownames(desdatan) <- desdata[, "Label"]
   if (label) {
     if (length(extract) > 2 || !is.numeric(extract))
       stop("please provide two number for file name extraction only")

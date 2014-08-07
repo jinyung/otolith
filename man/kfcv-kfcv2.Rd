@@ -41,9 +41,9 @@ kfcv2(X, Y, method = c("lda", "plsda", "tree"), k = 5, threshold, ncomp)
   number of prediction after excluding the ones lower than
   threshold, if \code{threshold} value is given}
   
-  \item{ind.prediction}{[\code{kfcv} only]} logical. prediction result on each 
+  \item{ind.prediction}{[\code{kfcv} only] logical. prediction result on each 
   specimen (every specimen will be used once in validation set in kfcv), 
-  with \code{TRUE} = correctly predicted, \code{FALSE} = wrongly predicted
+  with \code{TRUE} = correctly predicted, \code{FALSE} = wrongly predicted}
   
   \item{stat}{[\code{kfcv2} only] \code{k} number of matrix containing the
   calculated precision, sensitivity(recall) and specificity

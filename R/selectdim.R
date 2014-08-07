@@ -27,7 +27,7 @@ selectdim <- function(train, har, pc) {
   if (!missing(pc)) {
     if (pc > (dim(train)[2] - 4))
       stop("pc number too large")  
-    train <- train[, c(paste0("PC",  1:pc))]
+    train <- train[, c(paste0("PC", 1:pc))]
   }
   return(train)  
 }

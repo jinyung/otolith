@@ -4,11 +4,9 @@
 \title{Save / update project}
 \usage{
 saveproj(name, landmark = NULL, des = NULL, gpa = NULL, nef = NULL,
-  pc = NULL, har = NULL, des.threshold = NULL, nef.threshold = NULL,
-  gpa.threshold = NULL)
+  pc = NULL, har = NULL, class = NULL)
 updateproj(name, landmark = NULL, des = NULL, gpa = NULL, nef = NULL,
-  pc = NULL, har = NULL, des.threshold = NULL, nef.threshold = NULL,
-  gpa.threshold = NULL)
+  pc = NULL, har = NULL, class = NULL)
 }
 \arguments{
   \item{name}{character or path. file name/ path of the project to be saved or to 
@@ -28,15 +26,8 @@ updateproj(name, landmark = NULL, des = NULL, gpa = NULL, nef = NULL,
 
   \item{har}{numeric. number of optimized harmonics range
   determined by \code{\link{harcv}}}
-
-  \item{des.threshold}{numeric. optional. threshold value
-  determined by \code{\link{threcv}}}
-
-  \item{nef.threshold}{numeric. optional. threshold value
-  determined by \code{\link{threcv}}}
-
-  \item{gpa.threshold}{numeric. optional. threshold value
-  determined by \code{\link{threcv}}}
+  
+  \item{class}{character/factor giving specimen's species/groups.}
 }
 \value{
 a \code{.rds} file saved or updated.

@@ -6,9 +6,20 @@
 #'   means to guess the semi-landmarks arragement (the four types of
 #'   arrangements, see \code{\link{reland}}), so that the user can predict the
 #'   new, unknown samples even if the side and the direction of the otoliths are
-#'   unknown. This could be turned off using \code{reland=FALSE} to speed up the
+#'   unknown. This could be turned off using \code{reland = FALSE} to speed up the
 #'   prediction if the side and direction of the query is known, and is already
 #'   in the same arrangements as the dataset in project.
+#'   
+#'   Combination of multiple views of otoliths for prediction can be used by 
+#'   setting \code{multiview = TRUE}. Under \emph{multiview} mode, input of
+#'   multiple \code{project} and \code{query} can be done by using list. For 
+#'   example, by setting \code{project = list(medial = project_medial, 
+#'   anterior = project_anterior)} and \code{query = list(medial = query_medial, 
+#'   anterior = query_anterior)}. The names of list between project and query 
+#'   should match. Objects in the list for \code{project} should be projects 
+#'   created using \code{\link{saveproj}}. Objects in the list for query should
+#'   be 3-dimensional array consist of the semi-landmark configurations(for
+#'   \code{gpa}/ \code{nef} methods) or matrix containing the shape indices.
 #' @param project path to a project (\code{.rds} file) to be read, saved using 
 #'   \code{\link{saveproj}}, or a project object already read into R. if not
 #'   given, interactive file selector will pop out to prompt user to select a
@@ -19,8 +30,8 @@
 #'   configuration(s) to be predicted. If none is given, interactive file
 #'   selector will pop out to prompt user to select images to be searched
 #'   (Windows only)
-#' @param multiview logical. combination of different views for prediction. see
-#'  details   
+#' @param multiview logical. Turn on mode of combination of different views for
+#'   prediction. see details
 #' @param type type of data to predict
 #' @param method classification method. see Note
 #' @param har numeric. optional. By default \code{har} range saved in the
@@ -41,17 +52,18 @@
 #' @param mode  when \code{="search+pred"}, searching is included in addition to
 #'   prediction using \code{\link{otosearch}}. automatically changed to 
 #'   \code{"search+pred"} when \code{reland=TRUE}
-#' @param write logical. whether to save the result
+#' @param saveresult logical. whether to save the result
 #' @param search.plot logical. whether to plot the search results. used only when
 #'  \code{reland = TRUE} or \code{mode = "search+pred"}
 #' @param ... other arguments passed to \code{\link{agglda}}
 #' @note 
-#'  Currently the \code{method} supported are limited to \code{"lda"} and
-#'  \code{\link{agglda}} only. 
+#'  Currently the \code{method} supported are limited to \code{\link[MASS]{lda}}
+#'  and \code{\link{agglda}} only.
 #'  
 #'  Because sliding semi-landmark method is not supported by
-#'  \code{\link{otosearch}}, thus the \code{project} used should contain \code{gpa}
-#'  object from non-sliding GPA transformation. Sliding will be performed by
+#'  \code{\link{otosearch}}, thus the \code{project} used should contain
+#'  \code{gpa} object from non-sliding GPA transformation. Sliding will be
+#'  performed by
 #'  \code{otopred} instead if \code{gpa} is the preferred method and 
 #'  \code{fix = NULL}. 
 #' @return matrix of prediction class and posterior probablity.
@@ -70,7 +82,7 @@
 otopred <- function(project, query, multiview = FALSE, 
                     type = c("nef", "gpa", "des"),  
                     method = c("lda", "agglda", "tree", "plsda"), har, pc, 
-                    threshold, reland = TRUE, tol = 0.2, fix = NULL, 
+                    threshold, reland = TRUE, tol = NULL, fix = NULL, 
                     mode = c("pred", "search+pred"), saveresult = FALSE, 
                     search.plot = FALSE, ...) {
   type <- match.arg(type)
@@ -181,8 +193,9 @@ otopred <- function(project, query, multiview = FALSE,
       if (reland) {
         for (i in 1:dim(query)[3]) {
           orient <- searchresult[[i]]$orient[1]
-          if (searchresult[[i]]$rdist[1] > tol)
-            orient <- "ori"      
+          if (!is.null(tol))
+            if (searchresult[[i]]$rdist[1] > tol)
+              orient <- "ori"      
           query[, , i] <- reland(query[, , i], orient)
         }
       }

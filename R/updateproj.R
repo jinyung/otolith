@@ -12,9 +12,8 @@
 #'  \code{\link{saveproj}}, \code{\link{readRDS}}
 #' @export
 
-updateproj <- function(name, landmark=NULL, des=NULL, gpa=NULL, nef=NULL, pc=NULL, 
-                      har=NULL, des.threshold=NULL, nef.threshold=NULL, 
-                      gpa.threshold=NULL) {
+updateproj <- function(name, landmark = NULL, des = NULL, gpa = NULL, 
+                       nef = NULL, pc = NULL, har=NULL, class = NULL) {
   if (missing(name)) {
     if (Sys.info()['sysname'] == "Windows") {
       name <- choose.files(default = getwd(), multi=FALSE, 
@@ -31,9 +30,7 @@ updateproj <- function(name, landmark=NULL, des=NULL, gpa=NULL, nef=NULL, pc=NUL
   if (is.null(nef)) nef <- temp$nef
   if (is.null(pc)) pc <- temp$pc
   if (is.null(har)) har <- temp$har
-  if (is.null(des.threshold)) des.threshold <- temp$des.threshold
-  if (is.null(nef.threshold)) nef.threshold <- temp$nef.threshold
-  if (is.null(gpa.threshold)) gpa.threshold <- temp$gpa.threshold
+  if (is.null(class)) class <- temp$class
   temp2 <- list (landmark=landmark, des=des, nef=nef, gpa=gpa, pc=pc, 
            har=har, class=des$sp)
   saveRDS(temp2, file=paste0(name))

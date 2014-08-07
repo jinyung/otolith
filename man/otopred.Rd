@@ -4,8 +4,8 @@
 \usage{
 otopred(project, query, multiview = FALSE, type = c("nef", "gpa", "des"),
   method = c("lda", "agglda", "tree", "plsda"), har, pc, threshold,
-  reland = TRUE, tol = 0.2, fix = NULL, mode = c("pred", "search+pred"),
-  saveresult = FALSE, search.plot = FALSE, ...)
+  reland = TRUE, tol = NULL, fix = NULL, mode = c("pred",
+  "search+pred"), saveresult = FALSE, search.plot = FALSE, ...)
 }
 \arguments{
   \item{project}{path to a project (\code{.rds} file) to be
@@ -22,8 +22,8 @@ otopred(project, query, multiview = FALSE, type = c("nef", "gpa", "des"),
   will pop out to prompt user to select images to be
   searched (Windows only)}
 
-  \item{multiview}{logical. combination of different views
-  for prediction. see details}
+  \item{multiview}{logical. Turn on mode of combination of
+  different views for prediction. see details}
 
   \item{type}{type of data to predict}
 
@@ -59,7 +59,7 @@ otopred(project, query, multiview = FALSE, type = c("nef", "gpa", "des"),
   \code{\link{otosearch}}. automatically changed to
   \code{"search+pred"} when \code{reland=TRUE}}
 
-  \item{write}{logical. whether to save the result}
+  \item{saveresult}{logical. whether to save the result}
 
   \item{search.plot}{logical. whether to plot the search
   results. used only when \code{reland = TRUE} or
@@ -81,14 +81,28 @@ as a means to guess the semi-landmarks arragement (the four
 types of arrangements, see \code{\link{reland}}), so that
 the user can predict the new, unknown samples even if the
 side and the direction of the otoliths are unknown. This
-could be turned off using \code{reland=FALSE} to speed up
+could be turned off using \code{reland = FALSE} to speed up
 the prediction if the side and direction of the query is
 known, and is already in the same arrangements as the
 dataset in project.
+
+Combination of multiple views of otoliths for prediction
+can be used by setting \code{multiview = TRUE}. Under
+\emph{multiview} mode, input of multiple \code{project} and
+\code{query} can be done by using list. For example, by
+setting \code{project = list(medial = project_medial,
+anterior = project_anterior)} and \code{query = list(medial
+= query_medial, anterior = query_anterior)}. The names of
+list between project and query should match. Objects in the
+list for \code{project} should be projects created using
+\code{\link{saveproj}}. Objects in the list for query
+should be 3-dimensional array consist of the semi-landmark
+configurations(for \code{gpa}/ \code{nef} methods) or
+matrix containing the shape indices.
 }
 \note{
 Currently the \code{method} supported are limited to
-\code{"lda"} and \code{\link{agglda}} only.
+\code{\link[MASS]{lda}} and \code{\link{agglda}} only.
 
 Because sliding semi-landmark method is not supported by
 \code{\link{otosearch}}, thus the \code{project} used

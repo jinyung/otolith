@@ -61,7 +61,7 @@ img2landmark <- function (path, type = c("dir", "file"),
     }    
   } else {
     switch(type, 
-           dir = assign("imglist", list.files(path)),
+           dir = assign("imglist", list.files(path, full.names = TRUE)),
            file = assign("imglist", path)
            )
   }
