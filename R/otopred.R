@@ -60,12 +60,11 @@
 #'  Currently the \code{method} supported are limited to \code{\link[MASS]{lda}}
 #'  and \code{\link{agglda}} only.
 #'  
-#'  Because sliding semi-landmark method is not supported by
-#'  \code{\link{otosearch}}, thus the \code{project} used should contain
-#'  \code{gpa} object from non-sliding GPA transformation. Sliding will be
-#'  performed by
-#'  \code{otopred} instead if \code{gpa} is the preferred method and 
-#'  \code{fix = NULL}. 
+#'  Because sliding semi-landmark method is not supported by 
+#'  \code{\link{otosearch}}, thus the \code{project} used should contain 
+#'  \code{gpa} object from non-sliding GPA transformation. Sliding will be 
+#'  performed by \code{otopred} instead if \code{gpa} is the preferred method
+#'  and \code{fix = NULL}.
 #' @return matrix of prediction class and posterior probablity.
 #' @importFrom MASS lda
 #' @importFrom tree tree

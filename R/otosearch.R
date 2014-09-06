@@ -1,8 +1,8 @@
-#' Search new specimens' configuration against project database 
+#' Search new specimens against project database 
 #' 
-#' @description search the semi-landmarks configuration(s) of new, unknown
-#'   specimens against the configurations saved in the project.
-#'  
+#' @description search the images/ semi-landmarks configuration(s) of new,
+#'   unknown specimens against the configurations saved in the project.
+#'   
 #' @details 
 #'   The search is based on the Procrustes (Riemannian) distance between
 #'   the query and the database. the lower the distance (\code{rdist}) between

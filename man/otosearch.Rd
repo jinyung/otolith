@@ -1,6 +1,6 @@
 \name{otosearch}
 \alias{otosearch}
-\title{Search new specimens' configuration against project database}
+\title{Search new specimens against project database}
 \usage{
 otosearch(project, query, show = 5, saveresult = FALSE, showplot = TRUE,
   savename)
@@ -44,8 +44,9 @@ range of that species in the database \item \code{orient}:
 type of configuration that match }
 }
 \description{
-search the semi-landmarks configuration(s) of new, unknown
-specimens against the configurations saved in the project.
+search the images/ semi-landmarks configuration(s) of new,
+unknown specimens against the configurations saved in the
+project.
 }
 \details{
 The search is based on the Procrustes (Riemannian) distance

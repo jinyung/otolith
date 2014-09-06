@@ -27,7 +27,7 @@ Sample curvillinear semi-landmarks on a closed outline, using either the 'comb' 
 the 'equally-spaced' methods.
 }
 \details{
-  \code{comb} divides the outline into two parts by larget PC axis, a 'comb' is
+  \code{comb} divides the outline into two parts by principal PC axis, a 'comb' is
   then used to guide the sampling of the semi-landmarks. See reference for 'comb' 
   method explanations.
   
