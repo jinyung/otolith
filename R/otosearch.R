@@ -183,7 +183,7 @@ otosearch <- function(project, query, show = 5, saveresult = FALSE,
             plotorient <- result[[i]]$orient[j]
           match <- project$landmark[, , index]
           matchlab <- switch(plotorient, ori = "original", rev = "diff direction", 
-                 flip = "diff side", fliprev = "diff direction + side")
+                 flip = "diff direction + side", fliprev = "diff side")
           match <- rotonto(x = query[, , i], y = reland(match, plotorient), 
                                 scale = TRUE, reflection = FALSE)$yrot
           plot(match, asp = 1, type = "n", axes = FALSE, xlim = xlim, ylim = ylim)
