@@ -23,7 +23,7 @@
 
 loadimg <- function (path, resize=TRUE, width) {
   imgname <- unlist(strsplit(path, "[.]")) # split at "."
-  imgtype <- rev(imgname)[1] # get the last str segment after "."
+  imgtype <- .ext(imgname) # get the last str segment after "."
   if (imgtype == "jpg") {
     require(jpeg)
     img <- readJPEG(path)
