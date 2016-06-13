@@ -22,21 +22,21 @@
 #' @export
 
 loadimg <- function (path, resize=TRUE, width) {
-  imgname <- unlist(strsplit(path, "[.]")) # split at "."
-  imgtype <- .ext(imgname) # get the last str segment after "."
-  if (imgtype == "jpg") {
+#   imgtype <- .ext(path) # get the last str segment after "."
+  if (grepl("jpg", path, ignore.case = TRUE)) {
     require(jpeg)
     img <- readJPEG(path)
-  } else if (imgtype == "tif") {
+  } else if (grepl("tif", path, ignore.case = TRUE)) {
     require(tiff)
     img <- readTIFF(path)
-  } else if (imgtype == "png") {
+  } else if (grepl("png", path, ignore.case = TRUE)) {
     require(png)
     img <- readPNG(path)
   } else {
     stop("file type not supported, only .jpg, .tif or .png are supported")
   }
-  if (getNumberOfFrames(img) == 3) 
+  require(EBImage)
+  if (numberOfFrames(img) == 3) 
       img <- img[, , 1] * 0.3 + img[, , 2] * 0.59 + img[, , 3] * 0.11
   img <- t(img)
   img <- EBImage::flip(img)
