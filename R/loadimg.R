@@ -23,10 +23,10 @@
 
 loadimg <- function (path, resize=TRUE, width) {
 #   imgtype <- .ext(path) # get the last str segment after "."
-  if (grepl("jpg", path, ignore.case = TRUE)) {
+  if (grepl("jpe?g", path, ignore.case = TRUE)) {
     require(jpeg)
     img <- readJPEG(path)
-  } else if (grepl("tif", path, ignore.case = TRUE)) {
+  } else if (grepl("tif?f", path, ignore.case = TRUE)) {
     require(tiff)
     img <- readTIFF(path)
   } else if (grepl("png", path, ignore.case = TRUE)) {
