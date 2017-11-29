@@ -7,7 +7,7 @@
 #' @param plot \code{no} = no plot; \code{overlay} = plot of outline overlaid 
 #'  on image; \code{plain} = plot of plain outline
 #' @return a matrix of outline coords. note the outline is in 8-connected format.
-#' @importFrom EBImage bwlabel computeFeatures.shape rmObjects ocontour getNumberOfFrames
+#' @importFrom EBImage bwlabel computeFeatures.shape rmObjects ocontour NumberOfFrames
 #' @seealso
 #' Which this function wraps: \code{\link[EBImage]{ocontour}}
 #' 
