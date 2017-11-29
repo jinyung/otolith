@@ -157,8 +157,9 @@ img2landmark <- function (path, type = c("dir", "file"),
       }
     }
   if (savelandmark) {
-    require(geomorph)
-    writeland.tps(landmark, paste(savedir, "semi-landmarks.tps", sep = "/"))
+    # require(geomorph)
+    geomorph::writeland.tps(landmark, paste(savedir, "semi-landmarks.tps", 
+                                            sep = "/"))
   }
   if (!suppress & (saveoutline | savelandmark | plot != "no"))
     cat("\nProcessing completed, the files are saved at: ", savedir)

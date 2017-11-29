@@ -16,17 +16,17 @@
 
 otosearch2 <- function(specimen, database, 
                        species = NULL, show = 5) {
-  require(Morpho)
+  # require(Morpho)
   if (dim(specimen)[1] != dim(database)[1])
     stop("the number of semi-landmarks differs between 
          the specimen and the reference specimens in database")
   n <- dim(database)[3]
   rdist <- numeric()
   for (i in 1:n) {
-    temp <- rotonto(x = specimen, y = database[, , i], scale = TRUE, 
-                    reflection = FALSE)
-    rdist[i] <- kendalldist(temp$yrot, specimen)
-  } # in rotonto, x is fixed, y is rotated
+    temp <- Morpho::rotonto(x = specimen, y = database[, , i], scale = TRUE, 
+                            reflection = FALSE)
+    rdist[i] <- Morpho::kendalldist(temp$yrot, specimen)
+  }  # in rotonto, x is fixed, y is rotated
   result <- round(data.frame(rdist), 5)
   result$label <- dimnames(database)[[3]]
   result$species <- species

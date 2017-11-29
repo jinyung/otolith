@@ -31,7 +31,7 @@
 
 rGPA <- function(A, fix=NULL, plotpca=FALSE, class) {
   # check
-  require(Morpho)
+  # require(Morpho)
   if (missing(class))
     stop("please provide class, you can use getclass()")
   p <- dim(A)[1]
@@ -44,7 +44,7 @@ rGPA <- function(A, fix=NULL, plotpca=FALSE, class) {
       slide <- slide[-fix]
   }
   A <- aligne(A)
-  gpa <- procSym(A, SMvector=slide, outlines=c(1:p, 1))
+  gpa <- Morpho::procSym(A, SMvector=slide, outlines=c(1:p, 1))
   size <- gpa$size
   tanc <- gpa$orpdata
   pca <- prcomp(as.data.frame(t(matrix(tanc, p * 2, n))))

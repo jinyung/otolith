@@ -154,8 +154,8 @@ otopred <- function(project, query, multiview = FALSE,
         if (any(.ext(query) == "tps")) {
           if (length(query) > 1)
             stop("multiple .tps files are not allowed")
-          require(geomorph)
-          query <- readland.tps(query, specID="ID")
+          # require(geomorph)
+          query <- geomorph::readland.tps(query, specID="ID")
         } else {
           if (file.info(query)$isdir) # ok, is the path given dir?
             pathtype <- "dir"
@@ -257,23 +257,23 @@ otopred <- function(project, query, multiview = FALSE,
   }
   # going through method of choice
   if (method == "lda") {
-    mod <- lda(x=moddata, class)
+    mod <- MASS::lda(x=moddata, class)
     prediction <- predict(mod, newdata=newdata)
     result <- data.frame(prediction$class)
     result$posterior <- round(apply(prediction$posterior, 1, max), 2)
     if (!missing(threshold))
       result$prediction.class[which(result$posterior < threshold)] <- NA    
   } else if (method == "agglda") {
-    require(MASS)
+    # require(MASS)
     result <- agglda(X = moddata, Y = class, 
                      newdata = as.matrix(newdata), 
                      threshold = threshold, suppress = TRUE, ...)
     colnames(result)[1] <- c("prediction.class")
   } else if (method == "tree") {
-    require(tree)
+    # require(tree)
     # to be added 
   } else if (method == "plsda") {
-    require(mixOmics)
+    # require(mixOmics)
     # to be added
   }
   # change the row names of result

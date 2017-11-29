@@ -19,7 +19,7 @@
 
 
 sprdist <- function(A, class) {
-  require(Morpho)
+  # require(Morpho)
   if (!is.factor(class))
     class <- factor(class)
   grlevel <- levels(class)
@@ -38,8 +38,8 @@ sprdist <- function(A, class) {
     ms <- mshape(tempA) 
     rdist <- numeric()
     for (j in 1:length(Aindex)) {
-      pair <- rotonto(x=tempA[, , j], y=ms)
-      rdist[j] <- kendalldist(pair$X, pair$Y)
+      pair <- Morpho::rotonto(x=tempA[, , j], y=ms)
+      rdist[j] <- Morpho::kendalldist(pair$X, pair$Y)
     }
     meanshape[, , i] <- ms
     sdist.mean[i] <- mean(rdist)

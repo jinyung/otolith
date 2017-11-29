@@ -90,17 +90,17 @@ otosearch <- function(project, query, show = 5, saveresult = FALSE,
   if (is.null(dimnames(project$landmark)[[3]]))
     stop("landmarks of project should be named")
   # get the query/ determine the query type
-  if (missing(query)) { # interactive selection if path not specified
+  if (missing(query)) {  # interactive selection if path not specified
     query <- img2landmark(type = "file", saveoutline = FALSE, 
                           savelandmark = FALSE)$landmark  
-  } else if (is.character(query)) { # is it even a character (path)?
-    if (!any(file.exists(query))) # ok, so is it a legit path?
+  } else if (is.character(query)) {  # is it even a character (path)?
+    if (!any(file.exists(query)))  # ok, so is it a legit path?
       stop("path(s) given do not exist, please check again")
     if (any(.ext(query) == "tps")) {
       if (length(query) > 1)
         stop("multiple .tps files are not allowed")
-      require(geomorph)
-      query <- readland.tps(query, specID="ID")
+      # require(geomorph)
+      query <- geomorph::readland.tps(query, specID="ID")
     } else {
       if (file.info(query)$isdir) # ok, is the path given dir?
         pathtype <- "dir"
@@ -109,9 +109,9 @@ otosearch <- function(project, query, show = 5, saveresult = FALSE,
       query <- img2landmark(query, type = pathtype, saveoutline = FALSE, 
                           savelandmark = FALSE)$landmark    
     }
-  } else if (is.matrix(query) | is.array(query)) { # if not path, is it config?
+  } else if (is.matrix(query) | is.array(query)) {  # if not path, is it config?
     query <- query  
-  } else { # not path nor config, error
+  } else {  # not path nor config, error
     stop(paste("query should be path(in character) OR",
          "matrix/ array of semi-landmark configuration(s) OR",
          "a .tps file containing the configurations"))
@@ -182,10 +182,13 @@ otosearch <- function(project, query, show = 5, saveresult = FALSE,
           result[[i]]$index.in.db[j] <- index
             plotorient <- result[[i]]$orient[j]
           match <- project$landmark[, , index]
-          matchlab <- switch(plotorient, ori = "original", rev = "diff direction", 
-                 flip = "diff direction + side", fliprev = "diff side")
-          match <- rotonto(x = query[, , i], y = reland(match, plotorient), 
-                                scale = TRUE, reflection = FALSE)$yrot
+          matchlab <- switch(plotorient, ori = "original", 
+                             rev = "diff direction", 
+                             flip = "diff direction + side", 
+                             fliprev = "diff side")
+          match <- Morpho::rotonto(x = query[, , i], 
+                                   y = reland(match, plotorient), 
+                                   scale = TRUE, reflection = FALSE)$yrot
           plot(match, asp = 1, type = "n", axes = FALSE, xlim = xlim, ylim = ylim)
           polygon(match)
           text(mean(match[,1]), mean(match[,2]), 

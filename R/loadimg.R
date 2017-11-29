@@ -24,26 +24,26 @@
 loadimg <- function (path, resize=TRUE, width) {
 #   imgtype <- .ext(path) # get the last str segment after "."
   if (grepl("jpe?g", path, ignore.case = TRUE)) {
-    require(jpeg)
-    img <- readJPEG(path)
+    # require(jpeg)
+    img <- jpeg::readJPEG(path)
   } else if (grepl("tif?f", path, ignore.case = TRUE)) {
-    require(tiff)
-    img <- readTIFF(path)
+    # require(tiff)
+    img <- tiff::readTIFF(path)
   } else if (grepl("png", path, ignore.case = TRUE)) {
-    require(png)
-    img <- readPNG(path)
+    # require(png)
+    img <- png::readPNG(path)
   } else {
     stop("file type not supported, only .jpg, .tif or .png are supported")
   }
-  require(EBImage)
-  if (numberOfFrames(img) == 3) 
+  # require(EBImage)
+  if (EBImage::numberOfFrames(img) == 3) 
       img <- img[, , 1] * 0.3 + img[, , 2] * 0.59 + img[, , 3] * 0.11
   img <- t(img)
   img <- EBImage::flip(img)
   x <- dim(img)[1]
   y <- dim(img)[2]
   if (resize == TRUE) {
-    require(EBImage)
+    # require(EBImage)
     if (missing(width)) {
       if ( x > 1280)
         img <- resize(img, w = 1280)

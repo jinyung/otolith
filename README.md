@@ -1,3 +1,5 @@
+[![Travis-CI Build Status](https://travis-ci.org/jinyung/otolith.svg?branch=master)](https://travis-ci.org/jinyung/otolith)
+
 Otolith
 =======
 

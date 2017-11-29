@@ -62,7 +62,7 @@
 
 .kflda <- function(X, Y, newdata = NULL, k = 5, 
                    prior = c("equal", "proportion")) {
-  require(MASS)
+  # require(MASS)
   Y <- factor(Y)
   dat <- data.frame(class=Y)
   dat$predictor <- as.matrix(X)   
@@ -90,7 +90,7 @@
     switch(prior, equal = assign("prior.", rep(1 / trainlength, trainlength)), 
            proportion = assign("prior.", sapply(summary(train$class), 
                                                 function (x) x / dim(train)[1])))
-    mod.i <- lda(class ~ predictor, data = train, prior = prior.)
+    mod.i <- MASS::lda(class ~ predictor, data = train, prior = prior.)
     if (!is.null(newdata)) {
       temp <- data.frame(newdata)
       temp$predictor <- as.matrix(newdata)
@@ -127,7 +127,7 @@
 
 
 .GPApred <- function(project, query, fix = NULL, pc) {
-  require(Morpho)  
+  # require(Morpho)  
   # set sliding param
     p <- dim(query)[1]
     n <- dim(query)[3]
@@ -154,13 +154,13 @@
     for (i in 1:n) {
       if (dorelax) {
         sink("NUL") # suppress relaxLM cat(), only works in Windows
-        rot[, , i] <- relaxLM(query[, , i], gpanew$mshape, SMvector = slide, 
-                              outlines = outline)
+        rot[, , i] <- Morpho::relaxLM(query[, , i], gpanew$mshape, 
+                                      SMvector = slide, outlines = outline)
         sink() # suppress relaxLM cat()
       } else {
         rot[, , i] <- query[, , i]
       }
-      rot[, , i] <- rotonto(gpanew$mshape, rot[, , i], scale = TRUE)$yrot
+      rot[, , i] <- Morpho::rotonto(gpanew$mshape, rot[, , i], scale = TRUE)$yrot
     }
     query.score <- predict(gpanew$pca, 
                            as.data.frame(t(matrix(rot, p * 2, n))))

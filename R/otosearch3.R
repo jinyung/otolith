@@ -15,24 +15,25 @@
 #' @export
 
 otosearch3 <- function(specimen, project, show = 5) {
-  require(Morpho)
+  # require(Morpho)
   meanshape <- project$gpa$meanshape
   # first get specimen to (by-species) meanshape dist
   ms.rdist <- numeric() 
   mslevel <- dim(meanshape)[3]  
   for (i in 1:mslevel) {  
-    temp <- rotonto(x = specimen, y = meanshape[, , i], reflection = FALSE, 
-                    scale = TRUE)
-    ms.rdist[i] <- kendalldist(temp$X, temp$Y)
-    temp2 <- rotonto(x = reland(specimen, "rev"), y = meanshape[, , i], 
-                     reflection = FALSE, scale = TRUE)
-    ms.rdist[mslevel + i] <- kendalldist(temp2$X, temp2$Y)
-    temp3 <- rotonto(x = reland(specimen, "flip"), y = meanshape[, , i], 
-                     reflection = FALSE, scale = TRUE)
-    ms.rdist[mslevel * 2 + i] <- kendalldist(temp3$X, temp3$Y)
-    temp4 <- rotonto(x = reland(specimen, "fliprev"), y = meanshape[, , i], 
-                     reflection = FALSE, scale = TRUE)
-    ms.rdist[mslevel * 3 + i] <- kendalldist(temp4$X, temp4$Y)
+    temp <- Morpho::rotonto(x = specimen, y = meanshape[, , i], 
+                            reflection = FALSE, scale = TRUE)
+    ms.rdist[i] <- Morpho::kendalldist(temp$X, temp$Y)
+    temp2 <- Morpho::rotonto(x = reland(specimen, "rev"), y = meanshape[, , i], 
+                             reflection = FALSE, scale = TRUE)
+    ms.rdist[mslevel + i] <- Morpho::kendalldist(temp2$X, temp2$Y)
+    temp3 <- Morpho::rotonto(x = reland(specimen, "flip"), y = meanshape[, , i], 
+                             reflection = FALSE, scale = TRUE)
+    ms.rdist[mslevel * 2 + i] <- Morpho::kendalldist(temp3$X, temp3$Y)
+    temp4 <- Morpho::rotonto(x = reland(specimen, "fliprev"), 
+                             y = meanshape[, , i], 
+                             reflection = FALSE, scale = TRUE)
+    ms.rdist[mslevel * 3 + i] <- Morpho::kendalldist(temp4$X, temp4$Y)
   }
   distmax <- project$gpa$rdist[, 3]
   # initialize
@@ -130,7 +131,7 @@ otosearch3 <- function(specimen, project, show = 5) {
     }
   }
   if (show > dim(result)[1])
-    show <- dim(result)[1] # so that show will always < results
+    show <- dim(result)[1]  # so that show will always < results
   result.index <- order(result[, 1])[1:show]
   result <- result[result.index, ]
   rownames(result) <- paste0("rank", 1:dim(result)[1])

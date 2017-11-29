@@ -68,8 +68,8 @@ kfcv2 <- function(X, Y, method=c("lda", "plsda", "tree"),
     trainlength<- length(levels(train$class))
     # build classification sub-models with selected method
     if (method == "lda") {
-      require(MASS)
-      mod.i <- lda(class ~ predictor, data=train, prior=
+      # require(MASS)
+      mod.i <- MASS::lda(class ~ predictor, data=train, prior=
                      rep(1/trainlength, trainlength))
       prediction.temp <- predict(mod.i, test)
       prediction.i <- prediction.temp$class
@@ -84,16 +84,16 @@ kfcv2 <- function(X, Y, method=c("lda", "plsda", "tree"),
                         # total prediction (= percent of total - NA)
       }
     } else if (method == "plsda") {
-      require(mixOmics)
+      # require(mixOmics)
       if(missing(ncomp))
         ncomp <- trainlength - 1
-      mod.i <- plsda(X=train$predictor, Y=train$class, ncomp=ncomp)
+      mod.i <- mixOmics::plsda(X=train$predictor, Y=train$class, ncomp=ncomp)
       prediction.temp <- predict(mod.i, test$predictor)
       prediction.i<- levels(train$class)[prediction.temp$class$max.dist[, ncomp]]
       prediction.i <- factor(prediction.i, levels=levels(Y))
     } else if (method == "tree"){
-      require(tree)
-      mod.i <- tree(class ~ predictor, data=train)
+      # require(tree)
+      mod.i <- tree::tree(class ~ predictor, data=train)
       prediction.i <- predict(mod.i, test, type='class')
     }
     # get the misclassification rate

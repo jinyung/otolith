@@ -16,20 +16,20 @@
 
 extractout <- function (img, threshold=0.3,
                             plot=c("no", "overlay", "plain")) {
-  require(EBImage)
+  # require(EBImage)
   # simple threshoding
   img.mask <- img > threshold
   # segmentation
-  img.mask <- bwlabel(img.mask)
+  img.mask <- EBImage::bwlabel(img.mask)
   # calculate area of each object
-  img.par <- computeFeatures.shape(img.mask)
+  img.par <- EBImage::computeFeatures.shape(img.mask)
   if (dim(img.par)[1] > 1) {
     # remove all object except the one with largest area
     rm.index <- (1:dim(img.par)[1])[- which.max(img.par[, "s.area"])] 
-    img.mask <- rmObjects(img.mask, rm.index)
+    img.mask <- EBImage::rmObjects(img.mask, rm.index)
   }
   # extract outline
-  img.con <- ocontour(EBImage::opening(img.mask))
+  img.con <- EBImage::ocontour(EBImage::opening(img.mask))
   # show plot
   plot <- match.arg(plot) 
   if (plot != "no") {
