@@ -7,7 +7,6 @@
 #'  \code{\link{routine1}} object
 #' @param method method \code{"\link{lda}"} for linear discriminant analysis,
 #'   \code{"\link{tree}"} for classification tree, 
-#'   \code{"\link{plsda}"} for partial least square-linear discriminant analysis
 #' @param k fold number of cross-validation
 #' @param threshold optional. A numeric value between 0-1 to set the threshold of 
 #'  posterior probility. Any class prediction with posterior probility lower than this 
@@ -26,7 +25,6 @@
 #'  
 #'  Methods of classifier: \code{\link{lda}}, \code{\link{plsda}}, \code{\link{tree}}
 #' @importFrom MASS lda
-#' @importFrom mixOmics plsda
 #' @importFrom tree tree
 #' @export
 
@@ -65,12 +63,12 @@ kfcv <- function(X, Y, method=c("lda", "plsda", "tree"),
       }
     } else if (method == "plsda") {
       # require(mixOmics)
-      if (missing(ncomp)) 
-        ncomp<- trainlength-1
-      mod.i <- mixOmics::plsda(X=train$predictor, Y=train$class, ncomp=ncomp)
-      prediction.temp <- predict(mod.i, test$predictor)
-      prediction.i <- levels(train$class)[prediction.temp$class$max.dist[, ncomp]]
-      prediction.i <- factor(prediction.i, levels=levels(Y))
+      # if (missing(ncomp)) 
+      #   ncomp<- trainlength-1
+      # mod.i <- mixOmics::plsda(X=train$predictor, Y=train$class, ncomp=ncomp)
+      # prediction.temp <- predict(mod.i, test$predictor)
+      # prediction.i <- levels(train$class)[prediction.temp$class$max.dist[, ncomp]]
+      # prediction.i <- factor(prediction.i, levels=levels(Y))
     } else if (method == "tree") {
       # require(tree)
       mod.i <- tree::tree(class ~ predictor, data=train)

@@ -20,8 +20,7 @@ kfcv2(X, Y, method = c("lda", "plsda", "tree"), k = 5, threshold, ncomp)
 
   \item{method}{method \code{"\link[MASS]{lda}"} for linear
   discriminant analysis, \code{"\link[tree]{tree}"} for
-  classification tree, \code{"\link[mixOmics]{plsda}"} for partial
-  least square-linear discriminant analysis}
+  classification tree}
 
   \item{k}{fold number of cross-validation}
 
@@ -29,9 +28,6 @@ kfcv2(X, Y, method = c("lda", "plsda", "tree"), k = 5, threshold, ncomp)
   set the threshold of posterior probility. Any class
   prediction with posterior probility lower than this value
   will be \code{NA}-ed and not reported. See \code{\link{threcv}}}
-
-  \item{ncomp}{argument passed to \code{\link[mixOmics]{plsda}}.Used
-  only when \code{method="plsda"}.}
 }
 \value{
   \item{misclass}{vector of k values of misclassification

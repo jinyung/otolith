@@ -31,9 +31,6 @@ mrkfcv2(X, Y, method = c("lda", "tree", "plsda"), k = 5, run = 100,
     set the threshold of posterior probility. Any class
     prediction with posterior probility lower than this value
     will be \code{NA}-ed and not reported. See \code{\link{threcv}}}
-
-  \item{ncomp}{argument passed to \code{\link[mixOmics]{plsda}}. used
-    only when \code{method="plsda"}}
     
   \item{suppress}{suppress the running status in R console
   when \code{TRUE}. [for \code{mrkfcv}] the option \code{"text"} is used for

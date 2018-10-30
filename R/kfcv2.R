@@ -4,7 +4,6 @@
 #'  calculate the by-class statistics (recall, precision and specificity)  
 #' @inheritParams kfcv
 #' @importFrom MASS lda
-#' @importFrom mixOmics plsda
 #' @importFrom tree tree
 #' @return
 #'  \item{misclass}{vector of k values of misclassification rate in percent 
@@ -85,12 +84,12 @@ kfcv2 <- function(X, Y, method=c("lda", "plsda", "tree"),
       }
     } else if (method == "plsda") {
       # require(mixOmics)
-      if(missing(ncomp))
-        ncomp <- trainlength - 1
-      mod.i <- mixOmics::plsda(X=train$predictor, Y=train$class, ncomp=ncomp)
-      prediction.temp <- predict(mod.i, test$predictor)
-      prediction.i<- levels(train$class)[prediction.temp$class$max.dist[, ncomp]]
-      prediction.i <- factor(prediction.i, levels=levels(Y))
+      # if(missing(ncomp))
+      #   ncomp <- trainlength - 1
+      # mod.i <- mixOmics::plsda(X=train$predictor, Y=train$class, ncomp=ncomp)
+      # prediction.temp <- predict(mod.i, test$predictor)
+      # prediction.i<- levels(train$class)[prediction.temp$class$max.dist[, ncomp]]
+      # prediction.i <- factor(prediction.i, levels=levels(Y))
     } else if (method == "tree"){
       # require(tree)
       mod.i <- tree::tree(class ~ predictor, data=train)

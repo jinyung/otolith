@@ -1,6 +1,6 @@
-[![Travis-CI Build Status](https://travis-ci.org/jinyung/otolith.svg?branch=master)](https://travis-ci.org/jinyung/otolith)
 Otolith
 =======
+[![Travis-CI Build Status](https://travis-ci.org/jinyung/otolith.svg?branch=master)](https://travis-ci.org/jinyung/otolith)
 
 R package for identification of fish otolith using digital images
 
